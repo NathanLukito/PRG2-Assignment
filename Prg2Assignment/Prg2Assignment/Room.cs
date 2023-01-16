@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//S10244400 Nathan Farrel Lukito
+
 namespace Prg2Assignment
 {
     abstract class Room
