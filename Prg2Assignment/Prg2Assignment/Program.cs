@@ -10,6 +10,7 @@ List <Guest> guestList = new List<Guest>();
 List <Room> roomList = new List<Room>();
 List<Stay> stayList = new List<Stay>();
 
+
 void InitStayData(List <Guest> guestList, List<Stay> stayList)
 {
     using (StreamReader sr = new StreamReader("Stays.csv"))
@@ -41,7 +42,8 @@ void InitStayData(List <Guest> guestList, List<Stay> stayList)
     }
 }
 
-void InitRoomData(List<Room> roomList, List<Guest> guestList, List<Stay> stayList)
+
+void InitRoomData(List<Room> roomList)
 {
     using (StreamReader sr = new StreamReader("Rooms.csv"))
     {
@@ -57,12 +59,14 @@ void InitRoomData(List<Room> roomList, List<Guest> guestList, List<Stay> stayLis
 
             if (data[0] == "Standard")
             {
-                StandardRoom standard = new StandardRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), true, true, true);
+                StandardRoom standard = new StandardRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), false, false, false);
+                roomList.Add(standard);
             }
 
             else if (data[0] == "Deluxe")
             {
-
+                DeluxeRoom deluxe = new DeluxeRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), false, false);
+                roomList.Add(deluxe);
             }
 
             else
@@ -96,55 +100,79 @@ void InitGuestData(List<Guest> guestList)
 }
 
 void ShowGuestDetails(List <Guest> guestList){
-    //Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
-    //for (int i = 0; i < guestList.Count; i++)
-    //{
-    //    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
-    //        guestList[i].name, guestList[i].passportNum, guestList[i].hotelStay.checkinDate, guestList[i].hotelStay.checkoutDate, guestList[i].membership.status, guestList[i].membership.points);
-    //}
-    using (StreamReader sr = new StreamReader("Guests.csv"))
+    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
+    for (int i = 0; i < guestList.Count; i++)
     {
-        var lines = sr.ReadLine();
-        if (lines != null)
-        {
-            string[] heading = lines.Split(',');
-            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
-                heading[0], heading[1], heading[2], heading[3]);
-        }
-
-        while ((lines = sr.ReadLine()) != null)
-        {
-            string[] data = lines.Split(',');
-
-            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
-                data[0], data[1], data[2], data[3]);
-        }
+        Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
+            guestList[i].name, guestList[i].passportNum, null, null, guestList[i].membership.status, guestList[i].membership.points);
     }
+    
 }
 
-void ShowRoomDetails()
+void ShowRoomDetails(List <Room> roomList)
 {
-    using (StreamReader sr = new StreamReader("Rooms.csv"))
+    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}", 
+        "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
+
+    for (int i = 0; i < roomList.Count; i++)
     {
-        var lines = sr.ReadLine();
-        if (lines != null)
+        if (roomList[i] is StandardRoom)
         {
-            string[] heading = lines.Split(',');
-            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
-                heading[0], heading[1], heading[2], heading[3]);
+            StandardRoom standard = (StandardRoom)roomList[i];
+            Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}",
+                standard.roomNumber, standard.bedConfiguration, standard.dailyRate, standard.isAvail, standard.requireWifi, standard.requireBreakfast, null);
+
         }
 
-        while ((lines = sr.ReadLine()) != null)
+        else if (roomList[i] is DeluxeRoom)
         {
-            string[] data = lines.Split(',');
-
-            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
-                data[0], data[1], data[2], data[3]);
+            DeluxeRoom deluxe = (DeluxeRoom)roomList[i];
+            Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}",
+                deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, null, null, deluxe.additionalBed);
         }
     }
 }
 
-InitGuestData(guestList);
-InitStayData(guestList, stayList);
-ShowGuestDetails(guestList);
-ShowRoomDetails();
+
+void Main()
+{
+    while (true)
+    {
+        InitGuestData(guestList);
+        InitRoomData(roomList);
+        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[0] Exit Program");
+
+        try
+        {
+            string option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "1":
+                    ShowGuestDetails(guestList);
+                    break;
+
+                case "2":
+                    ShowRoomDetails(roomList);
+                    break;
+
+                case "0":
+                    Console.WriteLine("Exiting Program... ...");
+                    return;
+                default:
+                    throw new NullReferenceException();
+
+            }
+        }
+        catch (NullReferenceException)
+        {
+            Console.WriteLine("Invalid Option");
+        }
+    }
+    
+}
+
+Main();
+
+
+

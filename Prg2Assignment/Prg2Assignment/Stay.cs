@@ -14,7 +14,7 @@ namespace Prg2Assignment
         public DateTime checkinDate { get; set; }
         public DateTime checkoutDate { get; set;}
 
-        public List<Room> roomlist { get; set; }
+        public List<Room> roomlist { get; set; } = new List<Room>();
 
         //Constructors
         public Stay() { }
