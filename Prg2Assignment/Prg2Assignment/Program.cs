@@ -107,6 +107,7 @@ void ShowGuestDetails(List <Guest> guestList){
         Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
             guestList[i].name, guestList[i].passportNum, guestList[i].hotelStay.checkinDate, guestList[i].hotelStay.checkoutDate, guestList[i].membership.status, guestList[i].membership.points);
     }
+    Console.WriteLine("\n\n");
     
 }
 
@@ -131,6 +132,7 @@ void ShowRoomDetails(List <Room> roomList)
                 deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, "NULL", "NULL", deluxe.additionalBed);
         }
     }
+    Console.WriteLine("\n\n");
 }
 
 void RegisterGuest(List <Guest> guestList)
@@ -204,11 +206,9 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
                     Console.Write("Enter check out date e.g.(DD/MM/YYYY): ");
                     DateTime CheckOutDate = Convert.ToDateTime(Console.ReadLine());
 
-                    Stay NewStay = new Stay(CheckInDate, CheckOutDate);
+                    Stay NewStay = new Stay(CheckInDate, CheckOutDate);         
 
-                    //Guest newGuest = new Guest(guestList[i].name, guestList[i].passportNum, NewStay, guestList[i].membership);
-                    //guestList.Remove(guestList[i]);
-                    //guestList.Add(newGuest);
+                   
 
                     ShowRoomDetails(roomList);
                     try
@@ -295,18 +295,27 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
                                     NewStay.roomlist.Add(NewDeluxe);
                                     guestList[i].hotelStay = NewStay;
                                 }
-                                ShowGuestDetails(guestList);
-                                ShowRoomDetails(roomList);
+                                /* Console.Write("Do you wish to select another room? [Y/N] ");
+                                string AnotherOption = (Console.ReadLine()).ToUpper();
+                                if (AnotherOption == "Y")
+                                {
+
+                                } */
+                                Console.WriteLine("Guest successfully checked in!");
+                                Console.WriteLine("\n\n");     /////
+                                ShowGuestDetails(guestList);  ///// To remove
+                                ShowRoomDetails(roomList);   /////
                                 return;
-                                //Main();
+                                
                             }
+                            
                             
 
                             
                             
                         }
-                        //Console.WriteLine("Room not found");
-                        //CheckInGuest(guestList, roomList);
+                        Console.WriteLine("Room not found");
+                        CheckInGuest(guestList, roomList);
                     }
 
                     catch (Exception ex2)
@@ -330,8 +339,8 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
             }
           
         }
-        //Console.WriteLine("Guest not found");
-        //CheckInGuest(guestList, roomList);
+        Console.WriteLine("Guest not found");
+        CheckInGuest(guestList, roomList);
 
     }
     catch (Exception ex)
@@ -374,12 +383,12 @@ void Main()
                 case "0":
                     Console.WriteLine("Exiting Program... ...");
                     return;
-                default:
-                    throw new NullReferenceException();
+                default: throw new Exception();
+                
 
             }
         }
-        catch (NullReferenceException)
+        catch (Exception)
         {
             Console.WriteLine("Invalid Option");
         }
@@ -389,36 +398,3 @@ void Main()
 
 Main();
 
-/*
- while (true)
-    {
-        try
-        {
-
-            Console.Write("Enter Name: ");
-            string Name = Console.ReadLine();
-            Console.Write("Enter Passport Number: ");
-            string PassNum = Console.ReadLine();
-            if (PassNum.Length == 9)
-            {
-                Membership membership = new Membership("Ordinary", 0);
-                Guest NewGuest = new Guest(Name, PassNum, null, membership);
-                guestList.Add(NewGuest);
-                continue;
-            }
-            else
-            {
-                Console.WriteLine("Invalid Passport Number");
-                continue;
-            }
-
-           
-
-        }
-
-        catch (Exception ex)
-        {
-            Console.WriteLine("Invalid Input");
-        }
-    }
- */
