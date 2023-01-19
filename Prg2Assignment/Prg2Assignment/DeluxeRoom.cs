@@ -19,7 +19,7 @@ namespace Prg2Assignment
 
         public override double CalculateCharges()
         {
-            return;
+            return 0.1;
         }
     }
 }

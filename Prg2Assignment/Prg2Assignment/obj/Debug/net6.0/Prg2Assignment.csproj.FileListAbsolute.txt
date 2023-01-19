@@ -1,0 +1,15 @@
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.csproj.AssemblyReference.cache
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.AssemblyInfoInputs.cache
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.AssemblyInfo.cs
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.csproj.CoreCompileInputs.cache
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\bin\Debug\net6.0\Prg2Assignment.exe
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\bin\Debug\net6.0\Prg2Assignment.deps.json
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\bin\Debug\net6.0\Prg2Assignment.runtimeconfig.json
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\bin\Debug\net6.0\Prg2Assignment.dll
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\bin\Debug\net6.0\Prg2Assignment.pdb
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.dll
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\refint\Prg2Assignment.dll
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.pdb
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\Prg2Assignment.genruntimeconfig.cache
+C:\Users\table\OneDrive - Ngee Ann Polytechnic\Desktop\Desktop\Ngee Ann Poly\Semester 2\Programming 2\Assignment\Prg2Assignment\Prg2Assignment\obj\Debug\net6.0\ref\Prg2Assignment.dll
