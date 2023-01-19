@@ -182,6 +182,115 @@ void RegisterGuest(List <Guest> guestList)
     }
 }
 
+void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
+{
+    try
+    {
+        Console.Write("Enter room number: ");
+        int RoomNum = Convert.ToInt32(Console.ReadLine());
+
+        for (int x = 0; x < roomList.Count; x++)
+        {
+
+            if (roomList[x].roomNumber == RoomNum)
+            {
+                if (roomList[x] is StandardRoom)
+                {
+                    StandardRoom NewStandard = (StandardRoom)roomList[x];
+
+                    Console.Write("Require Wifi [Y/N]: ");
+                    string WifiOption = Console.ReadLine();
+                    if (WifiOption.ToUpper() == "Y")
+                    {
+                        NewStandard.requireWifi = true;
+                    }
+
+                    else if (WifiOption.ToUpper() == "N")
+                    {
+                        NewStandard.requireWifi = false;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
+
+                    }
+
+                    Console.Write("Require Breakfast [Y/N]: ");
+                    string BFOption = Console.ReadLine();
+                    if (BFOption.ToUpper() == "Y")
+                    {
+                        NewStandard.requireBreakfast = true;
+                        NewStandard.isAvail = false;
+                    }
+
+                    else if (BFOption.ToUpper() == "N")
+                    {
+                        NewStandard.requireBreakfast = false;
+                        NewStandard.isAvail = false;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
+                    }
+                    NewStay.roomlist.Add(NewStandard);
+                    NewGuest.hotelStay = NewStay;
+                }
+
+                else if (roomList[x] is DeluxeRoom)
+                {
+                    DeluxeRoom NewDeluxe = (DeluxeRoom)roomList[x];
+                    Console.Write("Additional Bed [Y/N]: ");
+                    string ABOption = Console.ReadLine();
+                    if (ABOption.ToUpper() == "Y")
+                    {
+                        NewDeluxe.additionalBed = true;
+                        NewDeluxe.isAvail = false;
+                    }
+
+                    else if (ABOption.ToUpper() == "N")
+                    {
+                        NewDeluxe.additionalBed = false;
+                        NewDeluxe.isAvail = false;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
+                    }
+                    NewStay.roomlist.Add(NewDeluxe);
+                    NewGuest.hotelStay = NewStay;
+                }
+                /* Console.Write("Do you wish to select another room? [Y/N] ");
+                string AnotherOption = (Console.ReadLine()).ToUpper();
+                if (AnotherOption == "Y")
+                {
+
+                } */
+                Console.WriteLine("Guest successfully checked in!");
+                Console.WriteLine("\n\n");     /////
+                ShowGuestDetails(guestList);  ///// To remove
+                ShowRoomDetails(roomList);   /////
+                return;
+
+            }
+
+        }
+        Console.WriteLine("Room not found");
+        CheckInGuest(guestList, roomList);
+    }
+
+    catch (Exception ex2)
+    {
+        Console.WriteLine("Invalid Input");
+        CheckInGuest(guestList, roomList);
+    }
+}
+
 void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 {
     ShowGuestDetails(guestList);
@@ -208,122 +317,31 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
                     Stay NewStay = new Stay(CheckInDate, CheckOutDate);         
 
-                   
-
                     ShowRoomDetails(roomList);
-                    try
+
+                    InputRoom(roomList, NewStay, guestList[i]);
+
+                    Console.Write("Do you wish to select another room [Y/N]: ");
+                    string AddOption = (Console.ReadLine()).ToUpper();
+                    if (AddOption == "exit")
                     {
-                        Console.Write("Enter room number: ");
-                        int RoomNum = Convert.ToInt32(Console.ReadLine());
-
-                        for (int x = 0; x < roomList.Count;x++)
-                        {
-                            
-                            if (roomList[x].roomNumber == RoomNum)
-                            {
-                                if (roomList[x] is StandardRoom)
-                                {
-                                    StandardRoom NewStandard = (StandardRoom)roomList[x];
-
-                                    Console.Write("Require Wifi [Y/N]: ");
-                                    string WifiOption = Console.ReadLine();
-                                    if (WifiOption.ToUpper() == "Y")
-                                    {
-                                        NewStandard.requireWifi= true;
-                                    }
-
-                                    else if (WifiOption.ToUpper() == "N")
-                                    {
-                                        NewStandard.requireWifi= false;
-                                    }
-
-                                    else
-                                    {
-                                        Console.WriteLine("Invalid input");
-                                        CheckInGuest(guestList, roomList);
-
-                                    }
-
-                                    Console.Write("Require Breakfast [Y/N]: ");
-                                    string BFOption = Console.ReadLine();
-                                    if (BFOption.ToUpper() == "Y")
-                                    {
-                                        NewStandard.requireBreakfast= true;
-                                        NewStandard.isAvail= false;
-                                    }
-
-                                    else if (BFOption.ToUpper() == "N")
-                                    {
-                                        NewStandard.requireBreakfast= false;
-                                        NewStandard.isAvail= false;
-                                    }
-
-                                
-
-
-                                    else
-                                    {
-                                        Console.WriteLine("Invalid input");
-                                        CheckInGuest(guestList, roomList);
-                                    }
-                                    NewStay.roomlist.Add(NewStandard);
-                                    guestList[i].hotelStay = NewStay;
-                                }
-
-                                else if (roomList[x] is DeluxeRoom)
-                                {
-                                    DeluxeRoom NewDeluxe = (DeluxeRoom)roomList[x];
-                                    Console.Write("Additional Bed [Y/N]: ");
-                                    string ABOption = Console.ReadLine();
-                                    if (ABOption.ToUpper() == "Y")
-                                    {
-                                        NewDeluxe.additionalBed = true;
-                                        NewDeluxe.isAvail= false;
-                                    }
-
-                                    else if (ABOption.ToUpper() == "N")
-                                    {
-                                        NewDeluxe.additionalBed= false;
-                                        NewDeluxe.isAvail= false;
-                                    }
-
-                                    else
-                                    {
-                                        Console.WriteLine("Invalid input");
-                                        CheckInGuest(guestList, roomList);
-                                    }
-                                    NewStay.roomlist.Add(NewDeluxe);
-                                    guestList[i].hotelStay = NewStay;
-                                }
-                                /* Console.Write("Do you wish to select another room? [Y/N] ");
-                                string AnotherOption = (Console.ReadLine()).ToUpper();
-                                if (AnotherOption == "Y")
-                                {
-
-                                } */
-                                Console.WriteLine("Guest successfully checked in!");
-                                Console.WriteLine("\n\n");     /////
-                                ShowGuestDetails(guestList);  ///// To remove
-                                ShowRoomDetails(roomList);   /////
-                                return;
-                                
-                            }
-                            
-                            
-
-                            
-                            
-                        }
-                        Console.WriteLine("Room not found");
-                        CheckInGuest(guestList, roomList);
+                        return;
                     }
 
-                    catch (Exception ex2)
+                    else if (AddOption == "Y")
                     {
-                        Console.WriteLine("Invalid Input");
-                        CheckInGuest(guestList, roomList);
+                        InputRoom(roomList, NewStay, guestList[i]);
                     }
 
+                    else if (AddOption == "N")
+                    {
+                        return;
+                    }
+
+                    else
+                    {
+                        return;
+                    }
                 }
 
                 catch (Exception ex)
