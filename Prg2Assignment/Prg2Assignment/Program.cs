@@ -96,11 +96,29 @@ void InitGuestData(List<Guest> guestList)
 }
 
 void ShowGuestDetails(List <Guest> guestList){
-    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
-    for (int i = 0; i < guestList.Count; i++)
+    //Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
+    //for (int i = 0; i < guestList.Count; i++)
+    //{
+    //    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
+    //        guestList[i].name, guestList[i].passportNum, guestList[i].hotelStay.checkinDate, guestList[i].hotelStay.checkoutDate, guestList[i].membership.status, guestList[i].membership.points);
+    //}
+    using (StreamReader sr = new StreamReader("Guests.csv"))
     {
-        Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
-            guestList[i].name, guestList[i].passportNum, guestList[i].hotelStay.checkinDate, guestList[i].hotelStay.checkoutDate, guestList[i].membership.status, guestList[i].membership.points);
+        var lines = sr.ReadLine();
+        if (lines != null)
+        {
+            string[] heading = lines.Split(',');
+            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
+                heading[0], heading[1], heading[2], heading[3]);
+        }
+
+        while ((lines = sr.ReadLine()) != null)
+        {
+            string[] data = lines.Split(',');
+
+            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-20}",
+                data[0], data[1], data[2], data[3]);
+        }
     }
 }
 
