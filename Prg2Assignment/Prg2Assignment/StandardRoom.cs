@@ -26,7 +26,7 @@ namespace Prg2Assignment
 
         public override string ToString()
         {
-            return base.ToString() + "\tRequire WiFi: " + requireWifi + "\tRequire Breakfast: " + requireBreakfast;
+            return base.ToString() + "\tRequire WiFi: " + requireWifi + "\tRequire Breakfast: " + requireBreakfast + "\tAdditional bed: " + "NULL";
         }
     }
 }

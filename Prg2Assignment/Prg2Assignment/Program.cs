@@ -112,35 +112,7 @@ void ShowGuestDetails(List<Guest> guestlist)
     Console.WriteLine("\n\n");
 }
 
-/*void ShowRoomDetails(List <Room> roomList)
-{
-    Console.WriteLine("\n\n");
-    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}", 
-        "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
 
-    for (int i = 0; i < roomList.Count; i++)
-    {
-        if (roomList[i] is StandardRoom)
-        {
-            StandardRoom standard = (StandardRoom)roomList[i];
-            Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}",
-                standard.roomNumber, standard.bedConfiguration, standard.dailyRate, standard.isAvail, standard.requireWifi, standard.requireBreakfast, "NULL");
-        }
-
-        else if (roomList[i] is DeluxeRoom)
-        {
-            DeluxeRoom deluxe = (DeluxeRoom)roomList[i];
-            Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}",
-                deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, "NULL", "NULL", deluxe.additionalBed);
-        }
-    }
-    Console.WriteLine("\n\n");
-}*/
-
-
-
-
-//Check if the format for this is ok //
 void ShowRoomDetails(List<Room> roomList)
 {
     Console.WriteLine(border + "Room Details" + border);
@@ -417,6 +389,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
         InputRoom(roomList, NewStay, NewGuest);
         ExtraRoom(roomList, NewStay, NewGuest);
+        NewGuest.iSCheckedin = true;
 
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
@@ -460,6 +433,40 @@ Guest SearchGuest(List<Guest> guestList)
     return null;
 }
 
+
+void ExtendStay(List<Guest> guestlist)
+{
+    ShowGuestDetails(guestlist);
+    Console.Write("Enter passport number: ");
+    string UserInput = Console.ReadLine();
+    for (int i = 0; i < guestList.Count; i++)
+    {
+        if (guestlist[i].iSCheckedin == false && guestlist[i].passportNum == UserInput)
+        {
+            Console.WriteLine("Guest not checked in");
+        }
+
+        else if (guestlist[i].iSCheckedin == true && guestlist[i].passportNum == UserInput)
+        {
+            Console.Write("Enter number of days to extend: ");
+            int Extend = Convert.ToInt32(Console.ReadLine());
+            guestlist[i].hotelStay.checkoutDate = guestlist[i].hotelStay.checkoutDate.AddDays(Extend);
+            Console.WriteLine("Stay successfully extended");
+            Console.WriteLine("\n");
+            Console.WriteLine("#################################");
+            Console.WriteLine("\n\n");
+            return;
+        }
+        else
+        {
+            continue;
+
+        }
+
+
+    }
+}
+
 void Main()
 {
     InitGuestData(guestList);
@@ -492,6 +499,10 @@ void Main()
 
                 case "5":
                     ShowStayDetails(guestList);
+                    break;
+
+                case "6":
+                    ExtendStay(guestList);
                     break;
 
                 case "0":
