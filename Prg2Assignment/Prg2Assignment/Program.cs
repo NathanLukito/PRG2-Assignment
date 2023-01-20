@@ -105,7 +105,7 @@ void ShowGuestDetails(List <Guest> guestList){
     for (int i = 0; i < guestList.Count; i++)
     {
         Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
-            guestList[i].name, guestList[i].passportNum, guestList[i].hotelStay.checkinDate, guestList[i].hotelStay.checkoutDate, guestList[i].membership.status, guestList[i].membership.points);
+            guestList[i].name, guestList[i].passportNum, DateOnly.FromDateTime(guestList[i].hotelStay.checkinDate), DateOnly.FromDateTime(guestList[i].hotelStay.checkoutDate), guestList[i].membership.status, guestList[i].membership.points);
     }
     Console.WriteLine("\n\n");
     
