@@ -23,5 +23,10 @@ namespace Prg2Assignment
             points = p;
         }
 
+        public override string ToString()
+        {
+            return "Member Status: " + status + "\tPoints: " + points;
+        }
+
     }
 }
