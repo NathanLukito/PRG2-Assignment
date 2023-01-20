@@ -153,7 +153,7 @@ void ShowStayDetails(List<Guest> guestList)
             }
             else if (guestList[i].passportNum == PassNum)
             {
-                if (guestList[i].hotelStay.checkinDate == default)
+                if (guestList[i].iSCheckedin == false)
                 {
                     Console.WriteLine("Guest has not checked in");
                 }
@@ -411,6 +411,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
                       
                     InputRoom(roomList, NewStay, guestList[i]);
                     ExtraRoom(roomList, NewStay, guestList[i]);
+                    guestList[i].iSCheckedin = true;
 
                     Console.WriteLine("\n");
                     Console.WriteLine("#################################");
@@ -449,13 +450,45 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
     }
 }
 
+
+
+
+void ExtendStay(List<Guest> guestlist)
+{
+    ShowGuestDetails(guestlist);
+    Console.Write("Enter passport number: ");
+    string UserInput = Console.ReadLine();
+    for (int i = 0; i < guestList.Count; i++)
+    {
+        if (guestlist[i].iSCheckedin == false && guestlist[i].passportNum == UserInput)
+        {
+            Console.WriteLine("Guest not checked in");
+        }
+
+        else if(guestlist[i].iSCheckedin == true && guestlist[i].passportNum == UserInput)
+        {
+             Console.Write("Enter number of days to extend: ");
+             int Extend = Convert.ToInt32(Console.ReadLine());
+             guestlist[i].hotelStay.checkoutDate = guestlist[i].hotelStay.checkoutDate.AddDays(Extend);
+             Console.WriteLine("Stay successfully extended");
+             Console.WriteLine("\n");
+             Console.WriteLine("#################################");
+             Console.WriteLine("\n\n");
+            return;     
+        }
+
+
+    }
+}
+
 void Main()
 {
+    
     InitGuestData(guestList);
     InitRoomData(roomList);
     while (true)
     {
-        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[0] Exit Program");
+        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend stay \n[0] Exit Program");
 
         try
         {
@@ -483,6 +516,10 @@ void Main()
                     ShowStayDetails(guestList);
                     break;
 
+                case "6":
+                    ExtendStay(guestList);
+                    break;
+
                 case "0":
                     Console.WriteLine("Exiting Program... ...");
                     return;
@@ -499,5 +536,5 @@ void Main()
     
 }
 
-Main();
+Main(); 
 
