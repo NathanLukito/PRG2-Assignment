@@ -5,7 +5,6 @@ string GuestPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a
 string RoomsPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Rooms.csv";
 string StaysPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Stays.csv";
 
-//Display all guest details//
 
 List <Guest> guestList = new List<Guest>(); 
 List <Room> roomList = new List<Room>();
@@ -101,6 +100,7 @@ void InitGuestData(List<Guest> guestList)
 }
 
 void ShowGuestDetails(List <Guest> guestList){
+    Console.WriteLine("\n\n");
     Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
     for (int i = 0; i < guestList.Count; i++)
     {
@@ -113,6 +113,7 @@ void ShowGuestDetails(List <Guest> guestList){
 
 void ShowRoomDetails(List <Room> roomList)
 {
+    Console.WriteLine("\n\n");
     Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}", 
         "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
 
@@ -133,6 +134,77 @@ void ShowRoomDetails(List <Room> roomList)
         }
     }
     Console.WriteLine("\n\n");
+}
+
+void ShowStayDetails(List<Guest> guestList)
+{
+    ShowGuestDetails(guestList);
+
+    try
+    {
+        Console.Write("Enter guest Passport Number: ");
+        string PassNum = Console.ReadLine();
+
+        for (int i = 0; i < guestList.Count; i++)
+        {
+            if (PassNum == "exit")
+            {
+                break;
+            }
+            else if (guestList[i].passportNum == PassNum)
+            {
+                if (guestList[i].hotelStay.checkinDate == default)
+                {
+                    Console.WriteLine("Guest has not checked in");
+                }
+
+                else
+                {
+                    Console.WriteLine("\n\n");
+                    Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+                        "Name", "CheckInDate", "CheckOutDate", "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
+
+                    for (int x = 0; x < guestList[i].hotelStay.roomlist.Count; x++)
+                    {
+                        if (guestList[i].hotelStay.roomlist[x] is StandardRoom)
+                        {
+                            Guest guest = guestList[i];
+                            Stay stay = guestList[i].hotelStay;
+                            StandardRoom standard = (StandardRoom)guestList[i].hotelStay.roomlist[x];
+
+                            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+                                guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), standard.roomNumber, standard.bedConfiguration, standard.dailyRate, standard.isAvail, standard.requireWifi, standard.requireBreakfast, "NULL");
+                        }
+
+                        else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom)
+                        {
+                            Guest guest = guestList[i];
+                            Stay stay = guestList[i].hotelStay;
+                            DeluxeRoom deluxe = (DeluxeRoom)guestList[i].hotelStay.roomlist[x];
+
+                            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+                                guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, "NULL", "NULL", deluxe.additionalBed);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+              
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+    }
+
+    catch (Exception ex)
+    {
+        Console.WriteLine("Invalid input");
+    }
 }
 
 void RegisterGuest(List <Guest> guestList)
@@ -209,6 +281,7 @@ void ExtraRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
 
 void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
 {
+    ShowRoomDetails(roomList);
     try
     {
         Console.Write("Enter room number: ");
@@ -335,13 +408,20 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
                     Stay NewStay = new Stay(CheckInDate, CheckOutDate);         
 
-                    ShowRoomDetails(roomList);
+                      
                     InputRoom(roomList, NewStay, guestList[i]);
                     ExtraRoom(roomList, NewStay, guestList[i]);
+
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n");
                     Console.WriteLine("Guest successfully checked in!");
-                    Console.WriteLine("\n\n");     /////
-                    ShowGuestDetails(guestList);  ///// To remove
-                    ShowRoomDetails(roomList);   /////
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n\n"); 
+                    
+                    ShowGuestDetails(guestList);   
+                    ShowRoomDetails(roomList);  
                     return;
 
                 }
@@ -375,8 +455,7 @@ void Main()
     InitRoomData(roomList);
     while (true)
     {
-        
-        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[0] Exit Program");
+        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[0] Exit Program");
 
         try
         {
@@ -398,6 +477,10 @@ void Main()
 
                 case "4":
                     CheckInGuest(guestList, roomList);
+                    break;
+
+                case "5":
+                    ShowStayDetails(guestList);
                     break;
 
                 case "0":
