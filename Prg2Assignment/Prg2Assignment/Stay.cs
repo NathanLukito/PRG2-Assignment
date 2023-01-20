@@ -30,7 +30,7 @@ namespace Prg2Assignment
         //functions
         public override string ToString()
         {
-            return base.ToString() + "\tCheck in date: " + checkinDate + "\tCheck out date: " + checkoutDate;
+            return "Check in date: " + DateOnly.FromDateTime(checkinDate) + "\tCheck out date: " + DateOnly.FromDateTime(checkoutDate);
         }
 
     }

@@ -9,7 +9,7 @@ string StaysPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a
 List <Guest> guestList = new List<Guest>(); 
 List <Room> roomList = new List<Room>();
 List<Stay> stayList = new List<Stay>();
-
+string border = new string('-', 10);
 
 void InitStayData(List <Guest> guestList, List<Stay> stayList)
 {
@@ -99,19 +99,20 @@ void InitGuestData(List<Guest> guestList)
     }
 }
 
-void ShowGuestDetails(List <Guest> guestList){
-    Console.WriteLine("\n\n");
-    Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", "Name", "PassportNumber", "CheckinDate", "CheckoutDate", "Membership Status", "Membership Points");
-    for (int i = 0; i < guestList.Count; i++)
+
+
+void ShowGuestDetails(List<Guest> guestlist)
+{
+    Console.WriteLine(border + "Guest details" + border);
+    foreach(Guest guest in guestList)
     {
-        Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20}", 
-            guestList[i].name, guestList[i].passportNum, DateOnly.FromDateTime(guestList[i].hotelStay.checkinDate), DateOnly.FromDateTime(guestList[i].hotelStay.checkoutDate), guestList[i].membership.status, guestList[i].membership.points);
+        Console.WriteLine(guest.ToString());
     }
+    Console.WriteLine(border + border + border);
     Console.WriteLine("\n\n");
-    
 }
 
-void ShowRoomDetails(List <Room> roomList)
+/*void ShowRoomDetails(List <Room> roomList)
 {
     Console.WriteLine("\n\n");
     Console.WriteLine("{0,-10} {1,-20} {2,-25} {3,-25} {4, -20} {5, -20} {6, -20}", 
@@ -134,6 +135,21 @@ void ShowRoomDetails(List <Room> roomList)
         }
     }
     Console.WriteLine("\n\n");
+}*/
+
+
+
+
+//Check if the format for this is ok //
+void ShowRoomDetails(List<Room> roomList)
+{
+    Console.WriteLine(border + "Room Details" + border);
+    foreach (Room room in roomList)
+    {
+        Console.WriteLine(room.ToString());
+        Console.WriteLine("\n");
+    }
+    Console.WriteLine(border + border + border);
 }
 
 void ShowStayDetails(List<Guest> guestList)

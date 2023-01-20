@@ -21,5 +21,10 @@ namespace Prg2Assignment
         {
             return 0.1;
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + "\tAdditional bed: " + additionalBed;
+        }
     }
 }

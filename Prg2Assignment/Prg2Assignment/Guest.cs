@@ -29,11 +29,11 @@ namespace Prg2Assignment
             passportNum = pass;
             hotelStay = hs;
             membership = mem;
-        } 
+        }
 
         public override string ToString()
         {
-            return "Name: " + name + "\tPassport no: " + passportNum + "\tMembership: " + membership.ToString() + "Hotel stay: " + hotelStay.ToString();
+            return "Name: " + name + "\tPassport no: " + passportNum + "\t" + membership.ToString() + "\t" + hotelStay.ToString();
         }
     }
 }

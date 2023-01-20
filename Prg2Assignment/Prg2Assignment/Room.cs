@@ -26,9 +26,9 @@ namespace Prg2Assignment
         }
         public abstract double CalculateCharges();
 
-        public string ToString()
+        public override string ToString()
         {
-            return "RoomNumber: " + roomNumber + "BedConfiguration" + bedConfiguration + "DailyRate" + dailyRate + "Availability" + isAvail;
+            return "RoomNumber: " + roomNumber + "\tBed Configuration: " + bedConfiguration + "\tDaily Rate: " + dailyRate + "\tAvailability: " + isAvail;
         }
     }
 }
