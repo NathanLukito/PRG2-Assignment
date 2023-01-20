@@ -182,6 +182,31 @@ void RegisterGuest(List <Guest> guestList)
     }
 }
 
+void ExtraRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
+{
+    Console.Write("Do you wish to select another room [Y/N]: ");
+    string AddOption = (Console.ReadLine()).ToUpper();
+    if (AddOption == "exit")
+    {
+        return;
+    }
+
+    else if (AddOption == "Y")
+    {
+        InputRoom(roomList, NewStay, NewGuest);
+    }
+
+    else if (AddOption == "N")
+    {
+        return;
+    }
+
+    else
+    {
+        return;
+    }
+}
+
 void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
 {
     try
@@ -271,14 +296,8 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                 {
 
                 } */
-                Console.WriteLine("Guest successfully checked in!");
-                Console.WriteLine("\n\n");     /////
-                ShowGuestDetails(guestList);  ///// To remove
-                ShowRoomDetails(roomList);   /////
                 return;
-
             }
-
         }
         Console.WriteLine("Room not found");
         CheckInGuest(guestList, roomList);
@@ -294,7 +313,6 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
 void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 {
     ShowGuestDetails(guestList);
-
     try
     {
         Console.Write("Enter guest Passport Number: ");
@@ -318,30 +336,14 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
                     Stay NewStay = new Stay(CheckInDate, CheckOutDate);         
 
                     ShowRoomDetails(roomList);
-
                     InputRoom(roomList, NewStay, guestList[i]);
+                    ExtraRoom(roomList, NewStay, guestList[i]);
+                    Console.WriteLine("Guest successfully checked in!");
+                    Console.WriteLine("\n\n");     /////
+                    ShowGuestDetails(guestList);  ///// To remove
+                    ShowRoomDetails(roomList);   /////
+                    return;
 
-                    Console.Write("Do you wish to select another room [Y/N]: ");
-                    string AddOption = (Console.ReadLine()).ToUpper();
-                    if (AddOption == "exit")
-                    {
-                        return;
-                    }
-
-                    else if (AddOption == "Y")
-                    {
-                        InputRoom(roomList, NewStay, guestList[i]);
-                    }
-
-                    else if (AddOption == "N")
-                    {
-                        return;
-                    }
-
-                    else
-                    {
-                        return;
-                    }
                 }
 
                 catch (Exception ex)
