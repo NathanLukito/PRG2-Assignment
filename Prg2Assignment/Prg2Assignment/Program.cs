@@ -451,6 +451,9 @@ void ExtendStay(List<Guest> guestlist)
             Console.Write("Enter number of days to extend: ");
             int Extend = Convert.ToInt32(Console.ReadLine());
             guestlist[i].hotelStay.checkoutDate = guestlist[i].hotelStay.checkoutDate.AddDays(Extend);
+            Console.WriteLine("\n");
+            Console.WriteLine("#################################");
+            Console.WriteLine("\n");
             Console.WriteLine("Stay successfully extended");
             Console.WriteLine("\n");
             Console.WriteLine("#################################");
