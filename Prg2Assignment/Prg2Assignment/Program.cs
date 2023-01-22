@@ -421,6 +421,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     try
     {
         CheckGuest.iSCheckedin = false;
+
         guestList.Remove(CheckGuest);
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
