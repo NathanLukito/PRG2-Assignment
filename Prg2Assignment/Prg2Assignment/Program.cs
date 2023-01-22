@@ -413,6 +413,29 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
 }
 
+
+/*void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
+{
+    ShowGuestDetails(guestList);
+    Guest CheckGuest = SearchGuest(guestList);
+    try
+    {
+        CheckGuest.iSCheckedin = false;
+        Console.WriteLine("\n");
+        Console.WriteLine("#################################");
+        Console.WriteLine("\n");
+        Console.WriteLine("Guest successfully checked out!");
+        Console.WriteLine("\n");
+        Console.WriteLine("#################################");
+        Console.WriteLine("\n\n");
+    }
+    
+    catch (Exception ex)
+    {
+        Console.WriteLine("Invalid Input");
+        CheckOutGuest(guestList, roomList);
+    }
+}*/
 Guest SearchGuest(List<Guest> guestList)
 {
     Console.WriteLine("Enter passport number: ");
@@ -476,7 +499,7 @@ void Main()
     InitRoomData(roomList);
     while (true)
     {
-        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[0] Exit Program");
+        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[0] Exit Program");
 
         try
         {
@@ -506,6 +529,10 @@ void Main()
 
                 case "6":
                     ExtendStay(guestList);
+                    break;
+
+                case "7":
+                    CheckOutGuest(guestList, roomList);
                     break;
 
                 case "0":
