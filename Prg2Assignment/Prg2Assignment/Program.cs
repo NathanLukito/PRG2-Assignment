@@ -414,13 +414,14 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 }
 
 
-/*void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
+void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 {
     ShowGuestDetails(guestList);
     Guest CheckGuest = SearchGuest(guestList);
     try
     {
         CheckGuest.iSCheckedin = false;
+        guestList.Remove(CheckGuest);
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
         Console.WriteLine("\n");
@@ -428,6 +429,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
         Console.WriteLine("\n\n");
+        ShowGuestDetails(guestList);
     }
     
     catch (Exception ex)
@@ -435,7 +437,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
         Console.WriteLine("Invalid Input");
         CheckOutGuest(guestList, roomList);
     }
-}*/
+}
 Guest SearchGuest(List<Guest> guestList)
 {
     Console.WriteLine("Enter passport number: ");
@@ -474,6 +476,9 @@ void ExtendStay(List<Guest> guestlist)
             Console.Write("Enter number of days to extend: ");
             int Extend = Convert.ToInt32(Console.ReadLine());
             guestlist[i].hotelStay.checkoutDate = guestlist[i].hotelStay.checkoutDate.AddDays(Extend);
+            Console.WriteLine("\n");
+            Console.WriteLine("#################################");
+            Console.WriteLine("\n");
             Console.WriteLine("Stay successfully extended");
             Console.WriteLine("\n");
             Console.WriteLine("#################################");
