@@ -421,7 +421,10 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     try
     {
         CheckGuest.iSCheckedin = false;
-
+        foreach (Room CheckedRoom in CheckGuest.hotelStay.roomlist)
+        {
+            CheckedRoom.isAvail= true;
+        }
         guestList.Remove(CheckGuest);
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
