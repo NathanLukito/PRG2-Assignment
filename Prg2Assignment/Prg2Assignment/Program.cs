@@ -221,11 +221,12 @@ void RegisterGuest(List <Guest> guestList)
                 }
             }
             Membership membership = new Membership("Ordinary", 0);
-            Guest NewGuest = new Guest(Name, PassNum, null, membership);
+            Stay stay = new Stay(default, default); 
+            Guest NewGuest = new Guest(Name, PassNum, stay, membership);
             guestList.Add(NewGuest);
             using (StreamWriter sw = new StreamWriter("Guests.csv", true))
             {
-                sw.WriteLine("{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
+                sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
             }
             ShowGuestDetails(guestList);
 
