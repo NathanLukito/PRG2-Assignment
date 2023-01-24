@@ -446,11 +446,13 @@ Guest SearchGuest(List<Guest> guestList)
 {
     Console.WriteLine("Enter passport number: ");
     string PassNum = Console.ReadLine();
+    
 
     for (int i = 0; i < guestList.Count; i++)
     {
         if (guestList[i].passportNum == PassNum)
         {
+            Console.WriteLine(guestList[i].passportNum);
             return guestList[i];
         }
 
