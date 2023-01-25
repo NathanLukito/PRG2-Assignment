@@ -1,4 +1,15 @@
-﻿using Prg2Assignment;
+﻿//==========================================================
+// Student Number : S10244400B
+// Student Name : Nathan Farrel Lukito
+//
+// Student Number: S10243254B
+// Student Name : Ervin Wong Yong Qi
+//==========================================================
+
+
+
+
+using Prg2Assignment;
 using System.Reflection.Metadata.Ecma335;
 
 string GuestPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Guests.csv";
