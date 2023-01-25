@@ -451,9 +451,8 @@ Guest SearchGuest(List<Guest> guestList)
 
     for (int i = 0; i < guestList.Count; i++)
     {
-        if ("S11223344B" == PassNum)
+        if (guestList[i].passportNum == PassNum)
         {
-            Console.WriteLine(guestList[i].passportNum);
             return guestList[i];
         }
 
