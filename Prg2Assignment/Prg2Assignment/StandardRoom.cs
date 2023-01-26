@@ -19,11 +19,9 @@ namespace Prg2Assignment
             this.requireBreakfast = requireBreakfast;
         }
 
-        public override double CalculateCharges(string year, Guest guest)
+        public override double CalculateCharges()
         {
-
-            return dailyRate * (guest.hotelStay.checkoutDate - guest.hotelStay.checkinDate).Days;
-        
+            return 0.1;
         }
 
         public override string ToString()

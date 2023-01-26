@@ -17,7 +17,7 @@ namespace Prg2Assignment
             this.additionalBed = additionalBed;
         }
 
-        public override double CalculateCharges(string year, Guest guest)
+        public override double CalculateCharges()
         {
             return 0.1;
         }
