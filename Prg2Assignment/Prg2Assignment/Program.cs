@@ -298,7 +298,7 @@ void ShowStayDetails(List<Guest> guestList)
         }
     }
 
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid input");
     }
@@ -346,7 +346,7 @@ void RegisterGuest(List <Guest> guestList)
             RegisterGuest(guestList);
         }
     }
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
     }
@@ -474,7 +474,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
         CheckInGuest(guestList, roomList);
     }
 
-    catch (Exception ex2)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckInGuest(guestList, roomList);
@@ -515,7 +515,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
     }
 
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckInGuest(guestList, roomList);
@@ -546,7 +546,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
         ShowGuestDetails(guestList);
     }
     
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckOutGuest(guestList, roomList);
@@ -616,49 +616,48 @@ void DisplayMonthlyCharges(List<Guest> guestList)
     string year = Console.ReadLine();
     for (int i = 0; i < guestList.Count; i++)
     {
-        if (guestList[i].hotelStay.roomlist is StandardRoom)
+        for (int x = 0; x < guestList[i].hotelStay.roomlist.Count; x++)
         {
-            StandardRoom standard = (StandardRoom)roomList[i];
-            foreach (Guest guest in guestList)
+            if (guestList[i].hotelStay.roomlist[x] is StandardRoom)
             {
-                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
+                StandardRoom standard = (StandardRoom)roomList[x];
+                foreach (Guest guest in guestList)
                 {
-                    for (int x = 0; x < monthList.Count; x++)
-                    {
-                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
-                        {
-                            double monthlycost = standard.CalculateCharges(guest);
-                            Console.WriteLine(monthList[x] + ": " + monthlycost);
-                        }
-
-                    }
+                    Console.WriteLine("hi");
                 }
 
-
             }
-
-        }
-        else
-        {
-            DeluxeRoom deluxe = (DeluxeRoom)roomList[i];
-            foreach (Guest guest in guestList)
+            else if (guestList[i].hotelStay.roomlist[x] is  DeluxeRoom)
             {
-                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
+                DeluxeRoom deluxe = (DeluxeRoom)roomList[x];
+                foreach (Guest guest in guestList)
                 {
-                    for (int x = 0; x < monthList.Count; x++)
+                    if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
                     {
-                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
+                        Console.WriteLine("test1");
+                        for (int a = 0; a < monthList.Count; a++)
                         {
-                            double monthlycost = deluxe.CalculateCharges(guest);
-                            Console.WriteLine(monthList[x] + ": " + monthlycost);
+                            Console.WriteLine("test2");
+                            if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[a])
+                            {
+
+                                Console.WriteLine("test3");
+                                double monthlycost = deluxe.CalculateCharges(guest);
+                                Console.WriteLine(monthList[a] + ": " + monthlycost);
+                            }
+
                         }
-
                     }
+
+
                 }
-
-
+            }
+            else
+            {
+                continue;
             }
         }
+        
     }
 
 }
