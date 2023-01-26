@@ -38,7 +38,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 Stay stay = new Stay(default, default);
                 OverrideRoom(stay);
-                CheckExtraRoom(stay);
                 OverrideStay(guestList, stay);
                 
             }
@@ -46,7 +45,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
                 OverrideRoom(stay);
-                CheckExtraRoom(stay);
                 OverrideStay(guestList, stay);
                 
             }
@@ -67,7 +65,8 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             DeluxeRoom deluxe = (DeluxeRoom)room;
                             deluxe.additionalBed = Convert.ToBoolean(data[8]);
                             stay.roomlist.Add(deluxe);
-                            
+                            CheckExtraRoom(stay);
+
                         }
 
                         else if (room.roomNumber == Convert.ToInt32(data[5]))
@@ -76,7 +75,8 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             standard.requireWifi = Convert.ToBoolean(data[6]);
                             standard.requireBreakfast = Convert.ToBoolean(data[7]);
                             stay.roomlist.Add(standard);
-                            
+                            CheckExtraRoom(stay);
+
                         }
                     }
 
@@ -108,7 +108,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 foreach (Room room in roomList)
                 {
-                    if (data[9] != null)
+                    if (data[9] != "")
                     {
                         if (room.roomNumber == Convert.ToInt32(data[9]))
                         {
