@@ -24,7 +24,7 @@ namespace Prg2Assignment
             this.dailyRate = dailyRate;
             this.isAvail = isAvail;
         }
-        public abstract double CalculateCharges();
+        public abstract double CalculateCharges(Guest guest);
 
         public override string ToString()
         {

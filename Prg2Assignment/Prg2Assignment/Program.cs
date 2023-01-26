@@ -20,6 +20,7 @@ string StaysPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a
 List <Guest> guestList = new List<Guest>(); 
 List <Room> roomList = new List<Room>();
 List<Stay> stayList = new List<Stay>();
+List<string> monthList = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 string border = new string('-', 10);
 
 void InitStayData(List <Guest> guestList, List<Room> roomList)
@@ -609,6 +610,59 @@ void ExtendStay(List<Guest> guestlist)
     }
 }
 
+void DisplayMonthlyCharges(List<Guest> guestList)
+{
+    Console.Write("Enter the year: ");
+    string year = Console.ReadLine();
+    for (int i = 0; i < guestList.Count; i++)
+    {
+        if (guestList[i].hotelStay.roomlist is StandardRoom)
+        {
+            StandardRoom standard = (StandardRoom)roomList[i];
+            foreach (Guest guest in guestList)
+            {
+                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
+                {
+                    for (int x = 0; x < monthList.Count; x++)
+                    {
+                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
+                        {
+                            double monthlycost = standard.CalculateCharges(guest);
+                            Console.WriteLine(monthList[x] + ": " + monthlycost);
+                        }
+
+                    }
+                }
+
+
+            }
+
+        }
+        else
+        {
+            DeluxeRoom deluxe = (DeluxeRoom)roomList[i];
+            foreach (Guest guest in guestList)
+            {
+                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
+                {
+                    for (int x = 0; x < monthList.Count; x++)
+                    {
+                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
+                        {
+                            double monthlycost = deluxe.CalculateCharges(guest);
+                            Console.WriteLine(monthList[x] + ": " + monthlycost);
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+    }
+
+}
+
 void Main()
 {
     InitGuestData(guestList);
@@ -616,7 +670,7 @@ void Main()
     InitStayData(guestList, roomList);
     while (true)
     {
-        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[0] Exit Program");
+        Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
 
         try
         {
@@ -652,6 +706,9 @@ void Main()
                     CheckOutGuest(guestList, roomList);
                     break;
 
+                case "8":
+                    DisplayMonthlyCharges(guestList);
+                    break;
                 case "0":
                     Console.WriteLine("Exiting Program... ...");
                     return;

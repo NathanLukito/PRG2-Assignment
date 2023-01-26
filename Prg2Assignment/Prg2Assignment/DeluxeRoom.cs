@@ -17,9 +17,9 @@ namespace Prg2Assignment
             this.additionalBed = additionalBed;
         }
 
-        public override double CalculateCharges()
+        public override double CalculateCharges(Guest guest)
         {
-            return 0.1;
+            return dailyRate * (guest.hotelStay.checkoutDate - guest.hotelStay.checkinDate).Days;
         }
 
         public override string ToString()
