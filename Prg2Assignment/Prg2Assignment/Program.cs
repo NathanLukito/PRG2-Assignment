@@ -22,7 +22,7 @@ List <Room> roomList = new List<Room>();
 List<Stay> stayList = new List<Stay>();
 string border = new string('-', 10);
 
-void InitStayData(List <Guest> guestList, List<Stay> stayList)
+void InitStayData(List <Guest> guestList, List<Room> roomList)
 {
     using (StreamReader sr = new StreamReader("Stays.csv"))
     {
@@ -34,24 +34,77 @@ void InitStayData(List <Guest> guestList, List<Stay> stayList)
         while ((lines = sr.ReadLine()) != null)
         {
             string[] data = lines.Split(',');
-            Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
-            
-            
-            for (int i = 0; i < guestList.Count; i++)
+            if (data[2] == "TRUE")
             {
-                if (guestList[i].passportNum == data[1])
+                Stay stay = new Stay(default, default);
+                OverrideRoom(stay);
+                OverrideStay(guestList, stay);
+                
+            }
+            else if (data[2] == "FALSE")
+            {
+                Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
+                OverrideRoom(stay);
+                OverrideStay(guestList, stay);
+                
+            }
+
+            else
+            {
+                continue;
+            }
+           
+            void OverrideRoom(Stay stay)
+            {
+                foreach (Room room in roomList)
                 {
-                    guestList[i].hotelStay = stay;
+                    if (room.roomNumber == Convert.ToInt32(data[5]))
+                    {
+                        if (room is DeluxeRoom)
+                        {
+                            DeluxeRoom deluxe = (DeluxeRoom)room;
+                            deluxe.additionalBed = Convert.ToBoolean(data[8]);
+                            stay.roomlist.Add(deluxe);
+                        }
+
+                        else if (room.roomNumber == Convert.ToInt32(data[5]))
+                        {
+                            StandardRoom standard = (StandardRoom)room;
+                            standard.requireWifi = Convert.ToBoolean(data[6]);
+                            standard.requireBreakfast = Convert.ToBoolean(data[7]);
+                            stay.roomlist.Add(standard);
+                        }
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+
                 }
-                else
+            }
+
+            void OverrideStay(List<Guest> guestList, Stay stay)
+            {
+                for (int i = 0; i < guestList.Count; i++)
                 {
-                    continue;
+                    if (guestList[i].passportNum == data[1])
+                    {
+                        guestList[i].hotelStay = stay;
+                        guestList[i].iSCheckedin = Convert.ToBoolean(data[2]);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
         }
 
     }
+
 }
+
 
 
 void InitRoomData(List<Room> roomList)
@@ -516,6 +569,7 @@ void Main()
 {
     InitGuestData(guestList);
     InitRoomData(roomList);
+    InitStayData(guestList, roomList);
     while (true)
     {
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[0] Exit Program");
