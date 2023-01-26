@@ -10,6 +10,7 @@
 
 
 using Prg2Assignment;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
 string GuestPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Guests.csv";
@@ -20,7 +21,22 @@ string StaysPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a
 List <Guest> guestList = new List<Guest>(); 
 List <Room> roomList = new List<Room>();
 List<Stay> stayList = new List<Stay>();
-List<string> monthList = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+IDictionary<string, double> monthlyCharges = new Dictionary<string, double>()
+{
+    {"Jan", 0.00},
+    {"Feb", 0.00},
+    {"Mar", 0.00},
+    {"Apr", 0.00},
+    {"May", 0.00},
+    {"Jun", 0.00},
+    {"Jul", 0.00},
+    {"Aug", 0.00},
+    {"Sep", 0.00},
+    {"Oct", 0.00},
+    {"Nov", 0.00},
+    {"Dec", 0.00},
+};
+
 string border = new string('-', 10);
 
 void InitStayData(List <Guest> guestList, List<Room> roomList)
@@ -298,7 +314,7 @@ void ShowStayDetails(List<Guest> guestList)
         }
     }
 
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid input");
     }
@@ -346,7 +362,7 @@ void RegisterGuest(List <Guest> guestList)
             RegisterGuest(guestList);
         }
     }
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
     }
@@ -474,7 +490,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
         CheckInGuest(guestList, roomList);
     }
 
-    catch (Exception ex2)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckInGuest(guestList, roomList);
@@ -515,7 +531,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
     }
 
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckInGuest(guestList, roomList);
@@ -546,7 +562,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
         ShowGuestDetails(guestList);
     }
     
-    catch (Exception ex)
+    catch (Exception)
     {
         Console.WriteLine("Invalid Input");
         CheckOutGuest(guestList, roomList);
@@ -610,57 +626,62 @@ void ExtendStay(List<Guest> guestlist)
     }
 }
 
-void DisplayMonthlyCharges(List<Guest> guestList)
+void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> monthlyCharges, string year)
+{
+    for (int i = 0; i < guestList.Count; i++)
+    {
+        for (int x = 0; x < guestList[i].hotelStay.roomlist.Count; x++)
+        {
+            if (guestList[i].hotelStay.roomlist[x] is StandardRoom && guestList[i].hotelStay.checkinDate.ToString("yyyy") == year)
+            {
+                StandardRoom standard = (StandardRoom)guestList[i].hotelStay.roomlist[x];
+                
+                
+                foreach(var item in monthlyCharges)
+                {
+                    double charge = 0.00;
+                    if (guestList[i].hotelStay.checkinDate.ToString("MMM") == item.Key)
+                    {
+                        monthlyCharges[item.Key] += standard.CalculateCharges(guestList[i]);
+                        
+                    }  
+                }
+                
+                
+
+            }
+            else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom && guestList[i].hotelStay.checkinDate.ToString("yyyy") == year)
+            {
+                DeluxeRoom deluxe = (DeluxeRoom)guestList[i].hotelStay.roomlist[x];
+                foreach (var item in monthlyCharges)
+                {
+                    if (guestList[i].hotelStay.checkinDate.ToString("MMM") == item.Key)
+                    {
+                        monthlyCharges[item.Key] += deluxe.CalculateCharges(guestList[i]);
+                         
+                    }
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+        
+        
+    }
+
+}
+
+void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
 {
     Console.Write("Enter the year: ");
     string year = Console.ReadLine();
-    for (int i = 0; i < guestList.Count; i++)
+    CalculateMonthlyCharges(guestList, monthlyCharges, year);
+    foreach (var item in monthlyCharges)
     {
-        if (guestList[i].hotelStay.roomlist is StandardRoom)
-        {
-            StandardRoom standard = (StandardRoom)roomList[i];
-            foreach (Guest guest in guestList)
-            {
-                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
-                {
-                    for (int x = 0; x < monthList.Count; x++)
-                    {
-                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
-                        {
-                            double monthlycost = standard.CalculateCharges(guest);
-                            Console.WriteLine(monthList[x] + ": " + monthlycost);
-                        }
-
-                    }
-                }
-
-
-            }
-
-        }
-        else
-        {
-            DeluxeRoom deluxe = (DeluxeRoom)roomList[i];
-            foreach (Guest guest in guestList)
-            {
-                if (guest.hotelStay.checkinDate.ToString("YYYY") == year)
-                {
-                    for (int x = 0; x < monthList.Count; x++)
-                    {
-                        if (guest.hotelStay.checkinDate.ToString("MMM") == monthList[x])
-                        {
-                            double monthlycost = deluxe.CalculateCharges(guest);
-                            Console.WriteLine(monthList[x] + ": " + monthlycost);
-                        }
-
-                    }
-                }
-
-
-            }
-        }
+        Console.WriteLine(item.Key + ": " + item.Value);
     }
-
 }
 
 void Main()
@@ -707,21 +728,22 @@ void Main()
                     break;
 
                 case "8":
-                    DisplayMonthlyCharges(guestList);
+                    DisplayMonthlyCharges(monthlyCharges);
                     break;
                 case "0":
                     Console.WriteLine("Exiting Program... ...");
                     return;
                 default: throw new Exception();
-                
-
             }
+
         }
         catch (Exception)
         {
             Console.WriteLine("Invalid Option");
         }
     }
+        
+    
     
 }
 
