@@ -38,6 +38,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 Stay stay = new Stay(default, default);
                 OverrideRoom(stay);
+                CheckExtraRoom(stay);
                 OverrideStay(guestList, stay);
                 
             }
@@ -45,6 +46,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
                 OverrideRoom(stay);
+                CheckExtraRoom(stay);
                 OverrideStay(guestList, stay);
                 
             }
@@ -65,6 +67,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             DeluxeRoom deluxe = (DeluxeRoom)room;
                             deluxe.additionalBed = Convert.ToBoolean(data[8]);
                             stay.roomlist.Add(deluxe);
+                            
                         }
 
                         else if (room.roomNumber == Convert.ToInt32(data[5]))
@@ -73,6 +76,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             standard.requireWifi = Convert.ToBoolean(data[6]);
                             standard.requireBreakfast = Convert.ToBoolean(data[7]);
                             stay.roomlist.Add(standard);
+                            
                         }
                     }
 
@@ -99,8 +103,48 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                     }
                 }
             }
-        }
 
+            void CheckExtraRoom(Stay stay)
+            {
+                foreach (Room room in roomList)
+                {
+                    if (data[9] != null)
+                    {
+                        if (room.roomNumber == Convert.ToInt32(data[9]))
+                        {
+                            if (room is StandardRoom)
+                            {
+                                StandardRoom standard = (StandardRoom)room;
+                                standard.requireWifi = Convert.ToBoolean(data[10]);
+                                standard.requireBreakfast = Convert.ToBoolean(data[11]);
+                                stay.roomlist.Add(standard);
+                            }
+
+                            else
+                            {
+                                DeluxeRoom deluxe = (DeluxeRoom)room;
+                                deluxe.additionalBed = Convert.ToBoolean(data[8]);
+                                stay.roomlist.Add(deluxe);
+                            }
+                        }
+
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+
+                }
+
+
+            }
+        }
+        
     }
 
 }
