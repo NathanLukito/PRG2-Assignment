@@ -414,6 +414,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     if (WifiOption.ToUpper() == "Y")
                     {
                         NewStandard.requireWifi = true;
+                        NewStandard.dailyRate += 10;
                     }
 
                     else if (WifiOption.ToUpper() == "N")
@@ -434,6 +435,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     {
                         NewStandard.requireBreakfast = true;
                         NewStandard.isAvail = false;
+                        NewStandard.dailyRate += 20;
                     }
 
                     else if (BFOption.ToUpper() == "N")
@@ -460,6 +462,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     {
                         NewDeluxe.additionalBed = true;
                         NewDeluxe.isAvail = false;
+                        NewDeluxe.dailyRate += 25;
                     }
 
                     else if (ABOption.ToUpper() == "N")
@@ -545,7 +548,6 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
         {
             CheckedRoom.isAvail= true;
         }
-        guestList.Remove(CheckGuest);
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
         Console.WriteLine("\n");
@@ -634,7 +636,6 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
                 
                 foreach(var item in monthlyCharges)
                 {
-                    double charge = 0.00;
                     if (guestList[i].hotelStay.checkoutDate.ToString("MMM") == item.Key)
                     {
                         monthlyCharges[item.Key] += standard.CalculateCharges(guestList[i]);
