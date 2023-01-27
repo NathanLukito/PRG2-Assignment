@@ -51,9 +51,13 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
         while ((lines = sr.ReadLine()) != null)
         {
             string[] data = lines.Split(',');
+            Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
+            OverrideRoom(stay);
+            OverrideStay(guestList, stay);
+            /*
             if (data[2] == "TRUE")
             {
-                Stay stay = new Stay(default, default);
+                Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
                 OverrideRoom(stay);
                 OverrideStay(guestList, stay);
                 
@@ -70,7 +74,8 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             {
                 continue;
             }
-           
+            */
+
             void OverrideRoom(Stay stay)
             {
                 foreach (Room room in roomList)
@@ -81,6 +86,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                         {
                             DeluxeRoom deluxe = (DeluxeRoom)room;
                             deluxe.additionalBed = Convert.ToBoolean(data[8]);
+                            deluxe.isAvail = false;
                             stay.roomlist.Add(deluxe);
                             CheckExtraRoom(stay);
 
@@ -91,6 +97,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             StandardRoom standard = (StandardRoom)room;
                             standard.requireWifi = Convert.ToBoolean(data[6]);
                             standard.requireBreakfast = Convert.ToBoolean(data[7]);
+                            standard.isAvail = false;
                             stay.roomlist.Add(standard);
                             CheckExtraRoom(stay);
 
@@ -628,11 +635,12 @@ void ExtendStay(List<Guest> guestlist)
 
 void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> monthlyCharges, string year)
 {
+    monthlyCharges.Keys.ToList().ForEach(k => monthlyCharges[k] = 0.00);
     for (int i = 0; i < guestList.Count; i++)
     {
         for (int x = 0; x < guestList[i].hotelStay.roomlist.Count; x++)
         {
-            if (guestList[i].hotelStay.roomlist[x] is StandardRoom && guestList[i].hotelStay.checkinDate.ToString("yyyy") == year)
+            if (guestList[i].hotelStay.roomlist[x] is StandardRoom && guestList[i].hotelStay.checkoutDate.ToString("yyyy") == year)
             {
                 StandardRoom standard = (StandardRoom)guestList[i].hotelStay.roomlist[x];
                 
@@ -640,7 +648,7 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
                 foreach(var item in monthlyCharges)
                 {
                     double charge = 0.00;
-                    if (guestList[i].hotelStay.checkinDate.ToString("MMM") == item.Key)
+                    if (guestList[i].hotelStay.checkoutDate.ToString("MMM") == item.Key)
                     {
                         monthlyCharges[item.Key] += standard.CalculateCharges(guestList[i]);
                         
@@ -650,12 +658,12 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
                 
 
             }
-            else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom && guestList[i].hotelStay.checkinDate.ToString("yyyy") == year)
+            else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom && guestList[i].hotelStay.checkoutDate.ToString("yyyy") == year)
             {
                 DeluxeRoom deluxe = (DeluxeRoom)guestList[i].hotelStay.roomlist[x];
                 foreach (var item in monthlyCharges)
                 {
-                    if (guestList[i].hotelStay.checkinDate.ToString("MMM") == item.Key)
+                    if (guestList[i].hotelStay.checkoutDate.ToString("MMM") == item.Key)
                     {
                         monthlyCharges[item.Key] += deluxe.CalculateCharges(guestList[i]);
                          
