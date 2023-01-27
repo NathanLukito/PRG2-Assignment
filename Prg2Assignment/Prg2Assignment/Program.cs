@@ -39,6 +39,16 @@ IDictionary<string, double> monthlyCharges = new Dictionary<string, double>()
 
 string border = new string('-', 10);
 
+bool ContainsOnlyLetters(string str)
+{
+    foreach (char c in str)
+    {
+        if (!char.IsLetter(c) && !char.IsDigit(c))
+            return false;
+    }
+    return true;
+}
+
 void InitStayData(List <Guest> guestList, List<Room> roomList)
 {
     using (StreamReader sr = new StreamReader("Stays.csv"))
@@ -54,7 +64,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
             OverrideRoom(stay);
             OverrideStay(guestList, stay);
-           
 
             void OverrideRoom(Stay stay)
             {
@@ -69,7 +78,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             deluxe.isAvail = false;
                             stay.roomlist.Add(deluxe);
                             CheckExtraRoom(stay);
-
                         }
 
                         else if (room.roomNumber == Convert.ToInt32(data[5]))
@@ -80,7 +88,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                             standard.isAvail = false;
                             stay.roomlist.Add(standard);
                             CheckExtraRoom(stay);
-
                         }
                     }
 
@@ -114,7 +121,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
                 {
                     if (data[9] != "")
                     {
-                        if (room.roomNumber == Convert.ToInt32(data[9]))
+                        if (room.roomNumber == Convert.ToInt32(data[9]) )
                         {
                             if (room is StandardRoom)
                             {
@@ -153,8 +160,6 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
 
 }
 
-
-
 void InitRoomData(List<Room> roomList)
 {
     using (StreamReader sr = new StreamReader("Rooms.csv"))
@@ -167,31 +172,37 @@ void InitRoomData(List<Room> roomList)
 
         while ((lines = sr.ReadLine()) != null)
         {
-            string[] data = lines.Split(',');
-
-            if (data[0] == "Standard")
+            try
             {
-                StandardRoom standard = new StandardRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), true, default, default);
-                roomList.Add(standard);
+                string[] data = lines.Split(',');
+                if (data[0] == "Standard")
+                {
+                    StandardRoom standard = new StandardRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), true, default, default);
+                    roomList.Add(standard);
+                }
+
+                else if (data[0] == "Deluxe")
+                {
+                    DeluxeRoom deluxe = new DeluxeRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), true, default);
+                    roomList.Add(deluxe);
+                }
+
+                else
+                {
+                    continue;
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Data added to room object is in a invalid format");
             }
 
-            else if (data[0] == "Deluxe")
-            {
-                DeluxeRoom deluxe = new DeluxeRoom(Convert.ToInt32(data[1]), data[2], Convert.ToDouble(data[3]), true, default);
-                roomList.Add(deluxe);
-            }
-
-            else
-            {
-                continue;
-            }
         }
     }
 }
 
 void InitGuestData(List<Guest> guestList)
 {
-    
     using (StreamReader sr = new StreamReader("Guests.csv"))
     {
         var lines = sr.ReadLine();
@@ -202,16 +213,21 @@ void InitGuestData(List<Guest> guestList)
 
         while ((lines = sr.ReadLine()) != null)
         {
-            string[] data = lines.Split(',');
-            Membership membership = new Membership(data[2], Convert.ToInt32(data[3]));
-            Stay stay = new Stay(default, default);
-            Guest guest = new Guest(data[0], data[1], stay, membership); //Change Null to Stay object
-            guestList.Add(guest);
+            try
+            {
+                string[] data = lines.Split(',');
+                Membership membership = new Membership(data[2], Convert.ToInt32(data[3]));
+                Stay stay = new Stay(default, default);
+                Guest guest = new Guest(data[0], data[1], stay, membership); //Change Null to Stay object
+                guestList.Add(guest);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Data added to guest object is in a invalid format");
+            }
         }
     }
 }
-
-
 
 void ShowGuestDetails(List<Guest> guestlist)
 {
@@ -223,10 +239,6 @@ void ShowGuestDetails(List<Guest> guestlist)
     Console.WriteLine(border + border + border);
     Console.WriteLine("\n\n");
 }
-
-
-
-
 
 //Show available rooms//
 void ShowRoomDetails(List<Room> roomList) 
@@ -251,59 +263,36 @@ void ShowRoomDetails(List<Room> roomList)
 void ShowStayDetails(List<Guest> guestList)
 {
     ShowGuestDetails(guestList);
-
-    try
+    Guest guest = SearchGuest(guestList);
+    if (guest.iSCheckedin == false)
     {
-        Console.Write("Enter guest Passport Number: ");
-        string PassNum = Console.ReadLine();
+        Console.WriteLine("Guest has not checked in");
+    }
 
-        for (int i = 0; i < guestList.Count; i++)
+    else
+    {
+        Console.WriteLine("\n\n");
+        Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+            "Name", "CheckInDate", "CheckOutDate", "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
+
+        for (int x = 0; x < guest.hotelStay.roomlist.Count; x++)
         {
-            if (PassNum == "exit")
+            if (guest.hotelStay.roomlist[x] is StandardRoom)
             {
-                break;
+                Stay stay = guest.hotelStay;
+                StandardRoom standard = (StandardRoom)guest.hotelStay.roomlist[x];
+
+                Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+                    guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), standard.roomNumber, standard.bedConfiguration, standard.dailyRate, standard.isAvail, standard.requireWifi, standard.requireBreakfast, "NULL");
             }
-            else if (guestList[i].passportNum == PassNum)
+
+            else if (guest.hotelStay.roomlist[x] is DeluxeRoom)
             {
-                if (guestList[i].hotelStay.checkinDate == default)
-                {
-                    Console.WriteLine("Guest has not checked in");
-                }
+                Stay stay = guest.hotelStay;
+                DeluxeRoom deluxe = (DeluxeRoom)guest.hotelStay.roomlist[x];
 
-                else
-                {
-                    Console.WriteLine("\n\n");
-                    Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
-                        "Name", "CheckInDate", "CheckOutDate", "RoomNumber", "BedConfig", "DailyRate", "Availability", "RequireWifi", "RequireBreakfast", "AdditionalBed");
-
-                    for (int x = 0; x < guestList[i].hotelStay.roomlist.Count; x++)
-                    {
-                        if (guestList[i].hotelStay.roomlist[x] is StandardRoom)
-                        {
-                            Guest guest = guestList[i];
-                            Stay stay = guestList[i].hotelStay;
-                            StandardRoom standard = (StandardRoom)guestList[i].hotelStay.roomlist[x];
-
-                            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
-                                guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), standard.roomNumber, standard.bedConfiguration, standard.dailyRate, standard.isAvail, standard.requireWifi, standard.requireBreakfast, "NULL");
-                        }
-
-                        else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom)
-                        {
-                            Guest guest = guestList[i];
-                            Stay stay = guestList[i].hotelStay;
-                            DeluxeRoom deluxe = (DeluxeRoom)guestList[i].hotelStay.roomlist[x];
-
-                            Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
-                                guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, "NULL", "NULL", deluxe.additionalBed);
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                }
-              
+                Console.WriteLine("{0,-10} {1,-20} {2,-20} {3,-10} {4,-20} {5,-25} {6,-25} {7, -20} {8, -20} {9, -20}",
+                    guest.name, DateOnly.FromDateTime(stay.checkinDate), DateOnly.FromDateTime(stay.checkoutDate), deluxe.roomNumber, deluxe.bedConfiguration, deluxe.dailyRate, deluxe.isAvail, "NULL", "NULL", deluxe.additionalBed);
             }
 
             else
@@ -312,58 +301,45 @@ void ShowStayDetails(List<Guest> guestList)
             }
         }
     }
-
-    catch (Exception)
-    {
-        Console.WriteLine("Invalid input");
-    }
 }
 
 void RegisterGuest(List <Guest> guestList)
 {
     ShowGuestDetails(guestList);
-    try
+    Console.Write("Enter Name: ");
+    string Name = Console.ReadLine();
+
+    Console.Write("Enter Passport Number: ");
+    string PassNum = Console.ReadLine();
+    if(ContainsOnlyLetters(PassNum) == true)
     {
-        Console.Write("Enter Name: ");
-        string Name = Console.ReadLine();
-
-        Console.Write("Enter Passport Number: ");
-        string PassNum = Console.ReadLine();
-        if (PassNum.Length == 9) //checks if passport num length is valid
+        for (int i = 0; i < guestList.Count; i++) //checks if passport num already exists
         {
-            for (int i = 0; i < guestList.Count; i++) //checks if passport num already exists
+            if (guestList[i].passportNum == PassNum)
             {
-                if (guestList[i].passportNum == PassNum)
-                {
-                    Console.WriteLine("Passport Number already exists");
-                    RegisterGuest(guestList);
-                }
-
-                else
-                {
-                    continue;
-                }
+                Console.WriteLine("Passport Number already exists");
+                RegisterGuest(guestList);
             }
-            Membership membership = new Membership("Ordinary", 0);
-            Stay stay = new Stay(default, default); 
-            Guest NewGuest = new Guest(Name, PassNum, stay, membership);
-            guestList.Add(NewGuest);
-            using (StreamWriter sw = new StreamWriter("Guests.csv", true))
+
+            else
             {
-                sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
+                continue;
             }
-            ShowGuestDetails(guestList);
-
         }
-        else
+        Membership membership = new Membership("Ordinary", 0);
+        Stay stay = new Stay(default, default);
+        Guest NewGuest = new Guest(Name, PassNum, stay, membership);
+        guestList.Add(NewGuest);
+        using (StreamWriter sw = new StreamWriter("Guests.csv", true))
         {
-            Console.WriteLine("Invalid Passport Number");
-            RegisterGuest(guestList);
+            sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
         }
+        ShowGuestDetails(guestList);
     }
-    catch (Exception)
+    else
     {
-        Console.WriteLine("Invalid Input");
+        Console.WriteLine("Passport number is not in the correct format");
+        RegisterGuest(guestList);
     }
 }
 
@@ -536,7 +512,6 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
 }
 
-
 void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 {
     ShowGuestDetails(guestList);
@@ -657,57 +632,57 @@ Guest SearchGuest(List<Guest> guestList)
 {
     Console.WriteLine("Enter passport number: ");
     string PassNum = Console.ReadLine();
-    
-
-    for (int i = 0; i < guestList.Count; i++)
+    if(ContainsOnlyLetters(PassNum.Trim()) == true)
     {
-        if (guestList[i].passportNum == PassNum)
+        for (int i = 0; i < guestList.Count; i++)
         {
-            return guestList[i];
-        }
+            if (PassNum == "exit")
+            {
+                break;
+            }
+            else if (guestList[i].passportNum == PassNum)
+            {
+                return guestList[i];
+            }
 
-        else
-        {
-            continue;
+            else
+            {
+                continue;
+            }
         }
+        Console.WriteLine("Passport number cannot be found");
+        SearchGuest(guestList);
+        return null;
     }
-    return null;
+    else
+    {
+        Console.WriteLine("Passport number is not in the correct format");
+        SearchGuest(guestList);
+        return null;
+    }
 }
-
 
 void ExtendStay(List<Guest> guestlist)
 {
     ShowGuestDetails(guestlist);
-    Console.Write("Enter passport number: ");
-    string UserInput = Console.ReadLine();
-    for (int i = 0; i < guestList.Count; i++)
+    Guest guest = SearchGuest(guestlist);
+    if (guest.iSCheckedin == false)
     {
-        if (guestlist[i].iSCheckedin == false && guestlist[i].passportNum == UserInput)
-        {
-            Console.WriteLine("Guest not checked in");
-        }
-
-        else if (guestlist[i].iSCheckedin == true && guestlist[i].passportNum == UserInput)
-        {
-            Console.Write("Enter number of days to extend: ");
-            int Extend = Convert.ToInt32(Console.ReadLine());
-            guestlist[i].hotelStay.checkoutDate = guestlist[i].hotelStay.checkoutDate.AddDays(Extend);
-            Console.WriteLine("\n");
-            Console.WriteLine("#################################");
-            Console.WriteLine("\n");
-            Console.WriteLine("Stay successfully extended");
-            Console.WriteLine("\n");
-            Console.WriteLine("#################################");
-            Console.WriteLine("\n\n");
-            return;
-        }
-        else
-        {
-            continue;
-
-        }
-
-
+        Console.WriteLine("Guest not checked in");
+    }
+    else
+    {
+        Console.Write("Enter number of days to extend: ");
+        int Extend = Convert.ToInt32(Console.ReadLine());
+        guest.hotelStay.checkoutDate = guest.hotelStay.checkoutDate.AddDays(Extend);
+        Console.WriteLine("\n");
+        Console.WriteLine("#################################");
+        Console.WriteLine("\n");
+        Console.WriteLine("Stay successfully extended");
+        Console.WriteLine("\n");
+        Console.WriteLine("#################################");
+        Console.WriteLine("\n\n");
+        return;
     }
 }
 
@@ -721,19 +696,18 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
             if (guestList[i].hotelStay.roomlist[x] is StandardRoom && guestList[i].hotelStay.checkoutDate.ToString("yyyy") == year)
             {
                 StandardRoom standard = (StandardRoom)guestList[i].hotelStay.roomlist[x];
-                
-                
                 foreach(var item in monthlyCharges)
                 {
                     if (guestList[i].hotelStay.checkoutDate.ToString("MMM") == item.Key)
                     {
                         monthlyCharges[item.Key] += standard.CalculateCharges(guestList[i]);
-                        
-                    }  
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
                 
-                
-
             }
             else if (guestList[i].hotelStay.roomlist[x] is DeluxeRoom && guestList[i].hotelStay.checkoutDate.ToString("yyyy") == year)
             {
@@ -742,8 +716,11 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
                 {
                     if (guestList[i].hotelStay.checkoutDate.ToString("MMM") == item.Key)
                     {
-                        monthlyCharges[item.Key] += deluxe.CalculateCharges(guestList[i]);
-                         
+                        monthlyCharges[item.Key] += deluxe.CalculateCharges(guestList[i]);  
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
             }
@@ -752,10 +729,7 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
                 continue;
             }
         }
-        
-        
     }
-
 }
 
 void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
@@ -777,59 +751,47 @@ void Main()
     while (true)
     {
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
+        string option = Console.ReadLine();
 
-        try
+        switch (option)
         {
-            string option = Console.ReadLine();
+            case "1":
+                ShowGuestDetails(guestList);
+                break;
 
-            switch (option)
-            {
-                case "1":
-                    ShowGuestDetails(guestList);
-                    break;
+            case "2":
+                ShowRoomDetails(roomList);
+                break;
 
-                case "2":
-                    ShowRoomDetails(roomList);
-                    break;
+            case "3":
+                RegisterGuest(guestList);
+                break;
 
-                case "3":
-                    RegisterGuest(guestList);
-                    break;
+            case "4":
+                CheckInGuest(guestList, roomList);
+                break;
 
-                case "4":
-                    CheckInGuest(guestList, roomList);
-                    break;
+            case "5":
+                ShowStayDetails(guestList);
+                break;
 
-                case "5":
-                    ShowStayDetails(guestList);
-                    break;
+            case "6":
+                ExtendStay(guestList);
+                break;
 
-                case "6":
-                    ExtendStay(guestList);
-                    break;
+            case "7":
+                CheckOutGuest(guestList, roomList);
+                break;
 
-                case "7":
-                    CheckOutGuest(guestList, roomList);
-                    break;
+            case "8":
+                DisplayMonthlyCharges(monthlyCharges);
+                break;
 
-                case "8":
-                    DisplayMonthlyCharges(monthlyCharges);
-                    break;
-                case "0":
-                    Console.WriteLine("Exiting Program... ...");
-                    return;
-                default: throw new Exception();
-            }
-
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("Invalid Option");
+            case "0":
+                Console.WriteLine("Exiting Program... ...");
+                return;
         }
     }
-        
-    
-    
 }
 
 Main();
