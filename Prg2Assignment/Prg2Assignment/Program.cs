@@ -476,12 +476,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     NewStay.roomlist.Add(NewDeluxe);
                     NewGuest.hotelStay = NewStay;
                 }
-                /* Console.Write("Do you wish to select another room? [Y/N] ");
-                string AnotherOption = (Console.ReadLine()).ToUpper();
-                if (AnotherOption == "Y")
-                {
-
-                } */
+                
                 return;
             }
         }
