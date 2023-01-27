@@ -519,10 +519,99 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     try
     {
         CheckGuest.iSCheckedin = false;
+        double charge = 0.00;
         foreach (Room CheckedRoom in CheckGuest.hotelStay.roomlist)
         {
+            if (CheckedRoom is StandardRoom)
+            {
+                StandardRoom Standard = (StandardRoom)CheckedRoom;
+                charge += Standard.CalculateCharges(CheckGuest);
+            }
+
+            else if (CheckedRoom is DeluxeRoom)
+            {
+                DeluxeRoom Deluxe = (DeluxeRoom)CheckedRoom;
+                charge += Deluxe.CalculateCharges(CheckGuest);
+            }
             CheckedRoom.isAvail= true;
         }
+        Console.WriteLine("Total charge is: " + charge);
+        Console.WriteLine(CheckGuest.name + "\n" + CheckGuest.passportNum + "\n" + CheckGuest.membership.ToString());
+        if (CheckGuest.membership.status == "Gold" || CheckGuest.membership.status == "Silver")
+        {
+            Console.WriteLine("You have {0} points redeemable. 1point = $1", CheckGuest.membership.points);
+            Console.WriteLine("Do you wish to redeem your points to offset your total bill? [Y/N]");
+            string Response = Console.ReadLine();
+            if (Response.ToUpper() == "Y")
+            {
+                double NewPoint = charge / 10;
+                charge = charge - CheckGuest.membership.points;
+                Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points,charge);
+                Console.WriteLine("You have earned {0} points", NewPoint);
+                CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                {
+                    Console.WriteLine("You have been promoted to the gold membership!!");
+                    CheckGuest.membership.status = "Gold";
+                }
+
+                else
+                {
+                    
+                }
+            }
+
+            else if (Response.ToUpper() == "N")
+            {
+                double NewPoint = charge / 10;
+                Console.WriteLine("Total bill: {0}", charge);
+                Console.WriteLine("You have earned {0} points", NewPoint);
+                CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                {
+                    Console.WriteLine("You have been promoted to the gold membership!!");
+                    CheckGuest.membership.status = "Gold";
+                }
+
+                else
+                {
+
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Invalid input");
+                CheckOutGuest(guestList, roomList);
+            }
+        }
+        else
+        {
+            Console.WriteLine("You are unable to redeem points to offset your total bill until you have a higher membership status");
+            double NewPoint = charge / 10;
+            Console.WriteLine("Total bill: {0}", charge);
+            Console.WriteLine("You have earned {0} points", NewPoint);
+            CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+
+            if (NewPoint >= 100 && NewPoint < 200)
+            {
+                Console.WriteLine("You have been promoted to the Silver membership!!");
+                CheckGuest.membership.status = "Silver";
+            }
+
+            else if (NewPoint >= 200)
+            {
+                Console.WriteLine("You have been promoted to the gold membership!!");
+                CheckGuest.membership.status = "Gold";
+            }
+
+            else
+            {
+
+            }
+        }
+
+
         Console.WriteLine("\n");
         Console.WriteLine("#################################");
         Console.WriteLine("\n");
