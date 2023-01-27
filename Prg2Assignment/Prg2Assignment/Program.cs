@@ -54,27 +54,7 @@ void InitStayData(List <Guest> guestList, List<Room> roomList)
             Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
             OverrideRoom(stay);
             OverrideStay(guestList, stay);
-            /*
-            if (data[2] == "TRUE")
-            {
-                Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
-                OverrideRoom(stay);
-                OverrideStay(guestList, stay);
-                
-            }
-            else if (data[2] == "FALSE")
-            {
-                Stay stay = new Stay(Convert.ToDateTime(data[3]), Convert.ToDateTime(data[4]));
-                OverrideRoom(stay);
-                OverrideStay(guestList, stay);
-                
-            }
-
-            else
-            {
-                continue;
-            }
-            */
+           
 
             void OverrideRoom(Stay stay)
             {
@@ -245,13 +225,25 @@ void ShowGuestDetails(List<Guest> guestlist)
 }
 
 
-void ShowRoomDetails(List<Room> roomList)
+
+
+
+//Show available rooms//
+void ShowRoomDetails(List<Room> roomList) 
 {
     Console.WriteLine(border + "Room Details" + border);
     foreach (Room room in roomList)
     {
-        Console.WriteLine(room.ToString());
-        Console.WriteLine("\n");
+        if (room.isAvail == true)
+        {
+            Console.WriteLine(room.ToString());
+            Console.WriteLine("\n");
+        }
+
+        else
+        {
+            continue;
+        }
     }
     Console.WriteLine(border + border + border);
 }
