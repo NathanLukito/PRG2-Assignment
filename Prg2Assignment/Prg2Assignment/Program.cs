@@ -12,6 +12,7 @@
 using Prg2Assignment;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 
 string GuestPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Guests.csv";
 string RoomsPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Rooms.csv";
@@ -39,14 +40,43 @@ IDictionary<string, double> monthlyCharges = new Dictionary<string, double>()
 
 string border = new string('-', 10);
 
-bool ContainsOnlyLetters(string str)
+void ValidatePassport(string str)
 {
-    foreach (char c in str)
+    Regex regex = new Regex(@"^[a-zA-Z0-9]+$"); //input must be between a to Z upper and lowercase and can be integer
+    if(str.Length == 0)
     {
-        if (!char.IsLetter(c) && !char.IsDigit(c))
-            return false;
+        throw new ArgumentNullException();
     }
-    return true;
+    else if(str.Length != 8)
+    {
+
+    }
+    else if(regex.IsMatch(str) == true)
+    {
+        //Do Nothing
+    }
+    else
+    {
+        throw new ArgumentException();
+    }
+}
+
+void ValidateName(string name)
+{
+    Regex regex = new Regex(@"^[a-zA-Z]+$"); //input must be between a to Z either upper or lowercase
+    if(name.Length == 0)
+    {
+        throw new ArgumentNullException();
+    }
+    else if (regex.IsMatch(name) == true)
+    {
+        //Do Nothing
+    }
+    else
+    {
+        throw new ArgumentException(); 
+    }
+    
 }
 
 void InitStayData(List <Guest> guestList, List<Room> roomList)
@@ -306,13 +336,14 @@ void ShowStayDetails(List<Guest> guestList)
 void RegisterGuest(List <Guest> guestList)
 {
     ShowGuestDetails(guestList);
-    Console.Write("Enter Name: ");
-    string Name = Console.ReadLine();
-
-    Console.Write("Enter Passport Number: ");
-    string PassNum = Console.ReadLine();
-    if(ContainsOnlyLetters(PassNum) == true)
+    try
     {
+        Console.Write("Enter Name: ");
+        string Name = Console.ReadLine();
+        ValidateName(Name);
+        Console.Write("Enter Passport Number: ");
+        string PassNum = Console.ReadLine();
+        ValidatePassport(PassNum);
         for (int i = 0; i < guestList.Count; i++) //checks if passport num already exists
         {
             if (guestList[i].passportNum == PassNum)
@@ -335,12 +366,20 @@ void RegisterGuest(List <Guest> guestList)
             sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
         }
         ShowGuestDetails(guestList);
+
+
     }
-    else
+    catch (ArgumentNullException)
     {
-        Console.WriteLine("Passport number is not in the correct format");
+        Console.WriteLine("Cannot enter empty input");
         RegisterGuest(guestList);
     }
+    catch (ArgumentException)
+    {
+        Console.WriteLine("Input invalid characters");
+        RegisterGuest(guestList);
+    }
+    
 }
 
 void ExtraRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
@@ -630,10 +669,11 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 }
 Guest SearchGuest(List<Guest> guestList)
 {
-    Console.WriteLine("Enter passport number: ");
-    string PassNum = Console.ReadLine();
-    if(ContainsOnlyLetters(PassNum.Trim()) == true)
+    try
     {
+        Console.WriteLine("Enter passport number: ");
+        string PassNum = Console.ReadLine();
+        ValidatePassport(PassNum);
         for (int i = 0; i < guestList.Count; i++)
         {
             if (PassNum == "exit")
@@ -654,9 +694,15 @@ Guest SearchGuest(List<Guest> guestList)
         SearchGuest(guestList);
         return null;
     }
-    else
+    catch (ArgumentNullException)
     {
-        Console.WriteLine("Passport number is not in the correct format");
+        Console.WriteLine("Cannot enter empty input");
+        SearchGuest(guestList);
+        return null;
+    }
+    catch (ArgumentException)
+    {
+        Console.WriteLine("Input invalid characters");
         SearchGuest(guestList);
         return null;
     }
@@ -752,45 +798,55 @@ void Main()
     {
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
         string option = Console.ReadLine();
-
-        switch (option)
+        
+        try
         {
-            case "1":
-                ShowGuestDetails(guestList);
-                break;
+            switch (option)
+            {
+                case "1":
+                    ShowGuestDetails(guestList);
+                    break;
 
-            case "2":
-                ShowRoomDetails(roomList);
-                break;
+                case "2":
+                    ShowRoomDetails(roomList);
+                    break;
 
-            case "3":
-                RegisterGuest(guestList);
-                break;
+                case "3":
+                    RegisterGuest(guestList);
+                    break;
 
-            case "4":
-                CheckInGuest(guestList, roomList);
-                break;
+                case "4":
+                    CheckInGuest(guestList, roomList);
+                    break;
 
-            case "5":
-                ShowStayDetails(guestList);
-                break;
+                case "5":
+                    ShowStayDetails(guestList);
+                    break;
 
-            case "6":
-                ExtendStay(guestList);
-                break;
+                case "6":
+                    ExtendStay(guestList);
+                    break;
 
-            case "7":
-                CheckOutGuest(guestList, roomList);
-                break;
+                case "7":
+                    CheckOutGuest(guestList, roomList);
+                    break;
 
-            case "8":
-                DisplayMonthlyCharges(monthlyCharges);
-                break;
+                case "8":
+                    DisplayMonthlyCharges(monthlyCharges);
+                    break;
 
-            case "0":
-                Console.WriteLine("Exiting Program... ...");
-                return;
+                case "0":
+                    Console.WriteLine("Exiting Program... ...");
+                    return;
+                default: throw new ArgumentException();
+                    break;
+            }
         }
+        catch(ArgumentException)
+        {
+            Console.WriteLine("Invalid Option, try again");
+        }
+        
     }
 }
 
