@@ -13,6 +13,7 @@ using Prg2Assignment;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 string GuestPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Guests.csv";
 string RoomsPath = "https://github.com/NathanLukito/PRG2-Assignment/blob/1aa849a8de2b114df39984bad9635403d24ab44b/Prg2Assignment/Prg2Assignment/bin/Debug/net6.0/Rooms.csv";
@@ -49,11 +50,11 @@ void ValidatePassport(string str)
     }
     else if(str.Length != 8)
     {
-
+        throw new ArgumentOutOfRangeException();
     }
     else if(regex.IsMatch(str) == true)
     {
-        //Do Nothing
+        
     }
     else
     {
@@ -336,50 +337,36 @@ void ShowStayDetails(List<Guest> guestList)
 void RegisterGuest(List <Guest> guestList)
 {
     ShowGuestDetails(guestList);
-    try
-    {
-        Console.Write("Enter Name: ");
-        string Name = Console.ReadLine();
-        ValidateName(Name);
-        Console.Write("Enter Passport Number: ");
-        string PassNum = Console.ReadLine();
-        ValidatePassport(PassNum);
-        for (int i = 0; i < guestList.Count; i++) //checks if passport num already exists
-        {
-            if (guestList[i].passportNum == PassNum)
-            {
-                Console.WriteLine("Passport Number already exists");
-                RegisterGuest(guestList);
-            }
-
-            else
-            {
-                continue;
-            }
-        }
-        Membership membership = new Membership("Ordinary", 0);
-        Stay stay = new Stay(default, default);
-        Guest NewGuest = new Guest(Name, PassNum, stay, membership);
-        guestList.Add(NewGuest);
-        using (StreamWriter sw = new StreamWriter("Guests.csv", true))
-        {
-            sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
-        }
-        ShowGuestDetails(guestList);
-
-
-    }
-    catch (ArgumentNullException)
-    {
-        Console.WriteLine("Cannot enter empty input");
-        RegisterGuest(guestList);
-    }
-    catch (ArgumentException)
-    {
-        Console.WriteLine("Input invalid characters");
-        RegisterGuest(guestList);
-    }
     
+    Console.Write("Enter Name: ");
+    string Name = Console.ReadLine();
+    ValidateName(Name);
+    Console.Write("Enter Passport Number: ");
+    string PassNum = Console.ReadLine();
+    ValidatePassport(PassNum);
+    for (int i = 0; i < guestList.Count; i++) //checks if passport num already exists
+    {
+        if (guestList[i].passportNum == PassNum)
+        {
+            Console.WriteLine("Passport Number already exists");
+            RegisterGuest(guestList);
+        }
+
+        else
+        {
+            continue;
+        }
+    }
+    Membership membership = new Membership("Ordinary", 0);
+    Stay stay = new Stay(default, default);
+    Guest NewGuest = new Guest(Name, PassNum, stay, membership);
+    guestList.Add(NewGuest);
+    using (StreamWriter sw = new StreamWriter("Guests.csv", true))
+    {
+        sw.Write("{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
+    }
+    ShowGuestDetails(guestList);
+
 }
 
 void ExtraRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
@@ -701,6 +688,11 @@ Guest SearchGuest(List<Guest> guestList)
         SearchGuest(guestList);
         return null;
     }
+    catch(ArgumentOutOfRangeException)
+    {
+        Console.WriteLine("Passport number length is too long");
+        return null;
+    }
     catch (ArgumentException)
     {
         Console.WriteLine("Input invalid characters");
@@ -799,7 +791,7 @@ void Main()
     {
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
         string option = Console.ReadLine();
-        
+
         try
         {
             switch (option)
@@ -813,23 +805,85 @@ void Main()
                     break;
 
                 case "3":
-                    RegisterGuest(guestList);
+                    try
+                    {
+                        RegisterGuest(guestList);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("Cannot enter empty input");
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Console.WriteLine("Passport number too long");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Input invalid characters");
+                    }
                     break;
 
                 case "4":
-                    CheckInGuest(guestList, roomList);
+                    try
+                    {
+                        CheckInGuest(guestList, roomList);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("Cannot enter empty input");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Input invalid characters");
+                    }
                     break;
 
                 case "5":
-                    ShowStayDetails(guestList);
+                    try
+                    {
+                        ShowStayDetails(guestList);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("Cannot enter empty input");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Input invalid characters");
+                    }
+
                     break;
 
                 case "6":
-                    ExtendStay(guestList);
+                    try
+                    {
+                        ExtendStay(guestList);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("Cannot enter empty input");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Input invalid characters");
+                    }
+
                     break;
 
                 case "7":
-                    CheckOutGuest(guestList, roomList);
+                    try
+                    {
+                        CheckOutGuest(guestList, roomList);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("Cannot enter empty input");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Input invalid characters");
+                    }
+
                     break;
 
                 case "8":
@@ -839,13 +893,15 @@ void Main()
                 case "0":
                     Console.WriteLine("Exiting Program... ...");
                     return;
-                default: throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
                     break;
             }
+
         }
         catch(ArgumentException)
         {
-            Console.WriteLine("Invalid Option, try again");
+           Console.WriteLine("Invalid Option, try again");
         }
         
     }

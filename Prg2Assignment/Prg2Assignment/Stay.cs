@@ -23,7 +23,6 @@ namespace Prg2Assignment
         {
             checkinDate= cid;
             checkoutDate= cod;
-            
         }
 
 
