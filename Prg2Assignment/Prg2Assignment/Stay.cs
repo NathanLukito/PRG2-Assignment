@@ -28,6 +28,17 @@ namespace Prg2Assignment
 
 
         //functions
+        public double CalculateTotal(Guest guest)
+        {
+            double total = 0;
+            for (int i = 0; i < roomlist.Count; i++)
+            {
+                total = total + roomlist[i].CalculateCharges(guest);
+                roomlist[i].isAvail = true;
+            }
+            return total;
+        }
+
         public override string ToString()
         {
             return "Check in date: " + DateOnly.FromDateTime(checkinDate) + "\tCheck out date: " + DateOnly.FromDateTime(checkoutDate);

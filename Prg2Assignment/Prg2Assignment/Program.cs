@@ -558,7 +558,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     try
     {
         CheckGuest.iSCheckedin = false;
-        double charge = 0.00;
+        /*double charge = 0.00;
         foreach (Room CheckedRoom in CheckGuest.hotelStay.roomlist)
         {
             if (CheckedRoom is StandardRoom)
@@ -573,9 +573,10 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                 charge += Deluxe.CalculateCharges(CheckGuest);
             }
             CheckedRoom.isAvail= true;
-        }
+        }*/
+        double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
         Console.WriteLine("Total charge is: " + charge);
-        Console.WriteLine(CheckGuest.name + "\n" + CheckGuest.passportNum + "\n" + CheckGuest.membership.ToString());
+        Console.WriteLine(CheckGuest.ToString());
         if (CheckGuest.membership.status == "Gold" || CheckGuest.membership.status == "Silver")
         {
             Console.WriteLine("You have {0} points redeemable. 1point = $1", CheckGuest.membership.points);
