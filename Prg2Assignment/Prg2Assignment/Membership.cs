@@ -23,6 +23,12 @@ namespace Prg2Assignment
             points = p;
         }
 
+        public double EarnPoints(Guest guest)
+        {
+            return guest.hotelStay.CalculateTotal(guest)/10;
+        }
+
+
         public override string ToString()
         {
             return "Member Status: " + status + "\tPoints: " + points;

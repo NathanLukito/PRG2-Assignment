@@ -48,7 +48,7 @@ void ValidatePassport(string str)
     {
         throw new ArgumentNullException();
     }
-    else if(str.Length != 8)
+    else if(str.Length != 9)
     {
         throw new ArgumentOutOfRangeException();
     }
@@ -363,7 +363,7 @@ void RegisterGuest(List <Guest> guestList)
     guestList.Add(NewGuest);
     using (StreamWriter sw = new StreamWriter("Guests.csv", true))
     {
-        sw.Write("{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
+        sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
     }
     ShowGuestDetails(guestList);
 
@@ -545,22 +545,6 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     try
     {
         CheckGuest.iSCheckedin = false;
-        /*double charge = 0.00;
-        foreach (Room CheckedRoom in CheckGuest.hotelStay.roomlist)
-        {
-            if (CheckedRoom is StandardRoom)
-            {
-                StandardRoom Standard = (StandardRoom)CheckedRoom;
-                charge += Standard.CalculateCharges(CheckGuest);
-            }
-
-            else if (CheckedRoom is DeluxeRoom)
-            {
-                DeluxeRoom Deluxe = (DeluxeRoom)CheckedRoom;
-                charge += Deluxe.CalculateCharges(CheckGuest);
-            }
-            CheckedRoom.isAvail= true;
-        }*/
         double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
         Console.WriteLine("Total charge is: " + charge);
         Console.WriteLine(CheckGuest.ToString());
@@ -571,11 +555,12 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
             string Response = Console.ReadLine();
             if (Response.ToUpper() == "Y")
             {
-                double NewPoint = charge / 10;
+                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest)/*charge / 10*/;
                 charge = charge - CheckGuest.membership.points;
                 Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points,charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
-                CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                /*CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);*/
+                CheckGuest.membership.points = Convert.ToInt32(NewPoint);
                 if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                 {
                     Console.WriteLine("You have been promoted to the gold membership!!");
@@ -590,7 +575,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 
             else if (Response.ToUpper() == "N")
             {
-                double NewPoint = charge / 10;
+                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
                 Console.WriteLine("Total bill: {0}", charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
                 CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
@@ -691,6 +676,7 @@ Guest SearchGuest(List<Guest> guestList)
     catch(ArgumentOutOfRangeException)
     {
         Console.WriteLine("Passport number length is too long");
+        SearchGuest(guestList);
         return null;
     }
     catch (ArgumentException)
