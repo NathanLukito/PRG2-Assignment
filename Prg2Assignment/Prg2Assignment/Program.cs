@@ -971,15 +971,15 @@ void Main()
         {
         switch (option)
         {
-            case "1":
+            case "1":  //Done By Nathan Farrel Lukito
                 ShowGuestDetails(guestList);
                 break;
 
-            case "2":
+            case "2":  //Done By Ervin Wong Yong Qi
                 ShowRoomDetails(roomList);
                 break;
 
-            case "3":
+            case "3": //Done By Nathan Farrel Lukito
                 try
                 {
                     RegisterGuest(guestList);
@@ -998,11 +998,11 @@ void Main()
                 }
                 break;
 
-            case "4":
+            case "4": //Done By Ervin Wong Yong Qi
                 CheckInGuest(guestList, roomList);
                 break;
 
-            case "5":
+            case "5": //Done By Nathan Farrel Lukito
                 try
                 {
                     ShowStayDetails(guestList);
@@ -1018,7 +1018,7 @@ void Main()
 
                 break;
 
-            case "6":
+            case "6":   //Done By Ervin Wong Yong Qi
                 try
                 {
                     ExtendStay(guestList);
@@ -1034,7 +1034,7 @@ void Main()
 
                 break;
 
-            case "7":
+            case "7": //Done By Ervin Wong Yong Qi
                 try
                 {
                     CheckOutGuest(guestList, roomList);
@@ -1051,7 +1051,7 @@ void Main()
                 break;
 
             case "8":
-                DisplayMonthlyCharges(monthlyCharges);
+                DisplayMonthlyCharges(monthlyCharges); //Done By Nathan Farrel Lukito
                 break;
 
             case "0":
