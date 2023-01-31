@@ -436,7 +436,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewStandard.dailyRate += 20;
                         NewStay.AddRoom(NewStandard);
                         NewGuest.hotelStay = NewStay;
-                        return;
+                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else if (BFOption.ToUpper() == "N")
@@ -445,7 +445,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewStandard.isAvail = false;
                         NewStay.AddRoom(NewStandard);
                         NewGuest.hotelStay = NewStay;
-                        return;
+                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else
@@ -467,7 +467,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewDeluxe.dailyRate += 25;
                         NewStay.AddRoom(NewDeluxe);
                         NewGuest.hotelStay = NewStay;
-                        return;
+                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else if (ABOption.ToUpper() == "N")
@@ -476,7 +476,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewDeluxe.isAvail = false;
                         NewStay.AddRoom(NewDeluxe);
                         NewGuest.hotelStay = NewStay;
-                        return;
+                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
                     else
                     {
