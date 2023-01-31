@@ -699,7 +699,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     {
         try
         {
-            CheckGuest.iSCheckedin = false;
+            
             double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
             Console.WriteLine("Total charge is: $" + charge);
             Console.WriteLine(CheckGuest.ToString());
@@ -717,6 +717,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: ${2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
                     Console.WriteLine("You have earned {0} points", NewPoint);
                     CheckGuest.membership.points = Convert.ToInt32(NewPoint);
+                    CheckGuest.iSCheckedin = false;
                     if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                     {
                         Console.WriteLine("You have been promoted to the gold membership!!");
@@ -727,6 +728,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     {
 
                     }
+
                 }
 
                 else if (Response.ToUpper() == "N")
@@ -737,6 +739,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     string UserKey = Console.ReadLine();
                     Console.WriteLine("You have earned {0} points", NewPoint);
                     CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                    CheckGuest.iSCheckedin = false;
                     if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                     {
                         Console.WriteLine("You have been promoted to the gold membership!!");
@@ -965,15 +968,15 @@ void Main()
         {
         switch (option)
         {
-            case "1":
+            case "1":  //Done By Nathan Farrel Lukito
                 ShowGuestDetails(guestList);
                 break;
 
-            case "2":
+            case "2":  //Done By Ervin Wong Yong Qi
                 ShowRoomDetails(roomList);
                 break;
 
-            case "3":
+            case "3": //Done By Nathan Farrel Lukito
                 try
                 {
                     RegisterGuest(guestList);
@@ -992,11 +995,11 @@ void Main()
                 }
                 break;
 
-            case "4":
+            case "4": //Done By Ervin Wong Yong Qi
                 CheckInGuest(guestList, roomList);
                 break;
 
-            case "5":
+            case "5": //Done By Nathan Farrel Lukito
                 try
                 {
                     ShowStayDetails(guestList);
@@ -1012,7 +1015,7 @@ void Main()
 
                 break;
 
-            case "6":
+            case "6":   //Done By Ervin Wong Yong Qi
                 try
                 {
                     ExtendStay(guestList);
@@ -1028,7 +1031,7 @@ void Main()
 
                 break;
 
-            case "7":
+            case "7": //Done By Ervin Wong Yong Qi
                 try
                 {
                     CheckOutGuest(guestList, roomList);
@@ -1045,7 +1048,7 @@ void Main()
                 break;
 
             case "8":
-                DisplayMonthlyCharges(monthlyCharges);
+                DisplayMonthlyCharges(monthlyCharges); //Done By Nathan Farrel Lukito
                 break;
 
             case "0":
