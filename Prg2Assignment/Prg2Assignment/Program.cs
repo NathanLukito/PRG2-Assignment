@@ -51,6 +51,9 @@ void ValidatePassport(string str)
     else if(str.Length != 9)
     {
         throw new ArgumentOutOfRangeException();
+
+
+
     }
     else if(regex.IsMatch(str) == true)
     {
@@ -817,11 +820,8 @@ Guest SearchGuest(List<Guest> guestList)
         ValidatePassport(PassNum);
         for (int i = 0; i < guestList.Count; i++)
         {
-            if (PassNum == "exit")
-            {
-                break;
-            }
-            else if (guestList[i].passportNum == PassNum)
+           
+            if (guestList[i].passportNum == PassNum)
             {
                 return guestList[i];
             }
@@ -832,26 +832,26 @@ Guest SearchGuest(List<Guest> guestList)
             }
         }
         Console.WriteLine("Passport number cannot be found");
-        SearchGuest(guestList);
-        return null;
+        return SearchGuest(guestList);
+        
     }
     catch (ArgumentNullException)
     {
         Console.WriteLine("Cannot enter empty input");
-        SearchGuest(guestList);
-        return null;
+        return SearchGuest(guestList);
+        
     }
     catch(ArgumentOutOfRangeException)
     {
         Console.WriteLine("Passport number length is too long");
-        SearchGuest(guestList);
-        return null;
+        return SearchGuest(guestList);
+        
     }
     catch (ArgumentException)
     {
         Console.WriteLine("Input invalid characters");
-        SearchGuest(guestList);
-        return null;
+        return SearchGuest(guestList);
+        
     }
 }
 
