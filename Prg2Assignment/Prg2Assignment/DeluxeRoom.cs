@@ -19,6 +19,8 @@ namespace Prg2Assignment
 
         public override double CalculateCharges(Guest guest)
         {
+
+            Console.WriteLine("Deluxe: " + roomNumber + "  " + dailyRate + "  " + dailyRate*(guest.hotelStay.checkoutDate - guest.hotelStay.checkinDate).Days);
             return dailyRate * (guest.hotelStay.checkoutDate - guest.hotelStay.checkinDate).Days;
         }
 
