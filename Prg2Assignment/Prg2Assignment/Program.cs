@@ -434,7 +434,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewStandard.requireBreakfast = true;
                         NewStandard.isAvail = false;
                         NewStandard.dailyRate += 20;
-                        NewStay.AddRoom(NewStandard);
+                        NewStay.roomlist.Add(NewStandard);
                         NewGuest.hotelStay = NewStay;
                         ExtraRoom(roomList, NewStay, NewGuest);
                     }
@@ -443,7 +443,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     {
                         NewStandard.requireBreakfast = false;
                         NewStandard.isAvail = false;
-                        NewStay.AddRoom(NewStandard);
+                        NewStay.roomlist.Add(NewStandard);
                         NewGuest.hotelStay = NewStay;
                         ExtraRoom(roomList, NewStay, NewGuest);
                     }
@@ -465,7 +465,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewDeluxe.additionalBed = true;
                         NewDeluxe.isAvail = false;
                         NewDeluxe.dailyRate += 25;
-                        NewStay.AddRoom(NewDeluxe);
+                        NewStay.roomlist.Add(NewDeluxe);
                         NewGuest.hotelStay = NewStay;
                         ExtraRoom(roomList, NewStay, NewGuest);
                     }
@@ -474,7 +474,7 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                     {
                         NewDeluxe.additionalBed = false;
                         NewDeluxe.isAvail = false;
-                        NewStay.AddRoom(NewDeluxe);
+                        NewStay.roomlist.Add(NewDeluxe);
                         NewGuest.hotelStay = NewStay;
                         ExtraRoom(roomList, NewStay, NewGuest);
                     }

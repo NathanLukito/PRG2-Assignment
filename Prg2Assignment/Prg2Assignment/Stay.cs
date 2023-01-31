@@ -38,11 +38,6 @@ namespace Prg2Assignment
             return total;
         }
 
-        public void AddRoom(Room room)
-        {
-            roomlist.Add(room);
-        }
-
         public override string ToString()
         {
             return "Check in date: " + DateOnly.FromDateTime(checkinDate) + "\tCheck out date: " + DateOnly.FromDateTime(checkoutDate);
