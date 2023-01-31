@@ -363,7 +363,7 @@ void RegisterGuest(List <Guest> guestList)
     guestList.Add(NewGuest);
     using (StreamWriter sw = new StreamWriter("Guests.csv", true))
     {
-        sw.Write("\n{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
+        sw.Write("{0},{1},{2},{3}", Name, PassNum, membership.status, membership.points);
     }
     ShowGuestDetails(guestList);
 
@@ -395,19 +395,23 @@ void ExtraRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
     }
 }
 
-void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
+void InputRoom(List<Room> roomList, Stay NewStay, Guest NewGuest)
 {
+    ShowRoomDetails(roomList);
     try
     {
         Console.Write("Enter room number: ");
         int RoomNum = Convert.ToInt32(Console.ReadLine());
+
         for (int x = 0; x < roomList.Count; x++)
         {
-            if (roomList[x].roomNumber == RoomNum && roomList[x].isAvail == true)
+
+            if (roomList[x].roomNumber == RoomNum)
             {
                 if (roomList[x] is StandardRoom)
                 {
                     StandardRoom NewStandard = (StandardRoom)roomList[x];
+
                     Console.Write("Require Wifi [Y/N]: ");
                     string WifiOption = Console.ReadLine();
                     if (WifiOption.ToUpper() == "Y")
@@ -423,8 +427,9 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
 
                     else
                     {
-                        Console.WriteLine("Please enter or [Y/N]");
-                        InputRoom(roomList, NewStay, NewGuest);
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
+
                     }
 
                     Console.Write("Require Breakfast [Y/N]: ");
@@ -434,25 +439,21 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewStandard.requireBreakfast = true;
                         NewStandard.isAvail = false;
                         NewStandard.dailyRate += 20;
-                        NewStay.roomlist.Add(NewStandard);
-                        NewGuest.hotelStay = NewStay;
-                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else if (BFOption.ToUpper() == "N")
                     {
                         NewStandard.requireBreakfast = false;
                         NewStandard.isAvail = false;
-                        NewStay.roomlist.Add(NewStandard);
-                        NewGuest.hotelStay = NewStay;
-                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else
                     {
-                        Console.WriteLine("Please enter or [Y/N]");
-                        InputRoom(roomList, NewStay, NewGuest);
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
                     }
+                    NewStay.AddRoom(NewStandard);
+                    NewGuest.hotelStay = NewStay;
                 }
 
                 else if (roomList[x] is DeluxeRoom)
@@ -465,44 +466,34 @@ void InputRoom(List<Room>roomList, Stay NewStay, Guest NewGuest)
                         NewDeluxe.additionalBed = true;
                         NewDeluxe.isAvail = false;
                         NewDeluxe.dailyRate += 25;
-                        NewStay.roomlist.Add(NewDeluxe);
-                        NewGuest.hotelStay = NewStay;
-                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
 
                     else if (ABOption.ToUpper() == "N")
                     {
                         NewDeluxe.additionalBed = false;
                         NewDeluxe.isAvail = false;
-                        NewStay.roomlist.Add(NewDeluxe);
-                        NewGuest.hotelStay = NewStay;
-                        ExtraRoom(roomList, NewStay, NewGuest);
                     }
+
                     else
                     {
-                        Console.WriteLine("Please enter or [Y/N]");
-                        InputRoom(roomList, NewStay, NewGuest);
+                        Console.WriteLine("Invalid input");
+                        CheckInGuest(guestList, roomList);
                     }
+                    NewStay.AddRoom(NewDeluxe);
+                    NewGuest.hotelStay = NewStay;
                 }
+
+                return;
             }
-            else if (roomList[x].roomNumber == RoomNum && roomList[x].isAvail == false)
-            {
-                Console.WriteLine("Room is unavailable");
-                InputRoom(roomList, NewStay, NewGuest);
-            }
-            else
-            {
-                continue;
-            } 
         }
-        Console.WriteLine("Room Number Not Found");
-        InputRoom(roomList, NewStay, NewGuest);
+        Console.WriteLine("Room not found");
+        CheckInGuest(guestList, roomList);
     }
-    
-    catch(Exception)
+
+    catch (Exception)
     {
-        Console.WriteLine("Invalid room number");
-        InputRoom(roomList, NewStay, NewGuest);
+        Console.WriteLine("Invalid Input");
+        CheckInGuest(guestList, roomList);
     }
 }
 
@@ -521,7 +512,7 @@ void CheckInGuest(List <Guest> guestList, List <Room> roomList)
 
         Stay NewStay = new Stay(CheckInDate, CheckOutDate);
 
-        ShowRoomDetails(roomList);
+        
         InputRoom(roomList, NewStay, NewGuest);
         ExtraRoom(roomList, NewStay, NewGuest);
         NewGuest.iSCheckedin = true;
@@ -565,12 +556,11 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
             string Response = Console.ReadLine();
             if (Response.ToUpper() == "Y")
             {
-                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest)/*charge / 10*/;
+                double NewPoint = charge / 10;
                 charge = charge - CheckGuest.membership.points;
                 Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points,charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
-                /*CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);*/
-                CheckGuest.membership.points = Convert.ToInt32(NewPoint);
+                CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
                 if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                 {
                     Console.WriteLine("You have been promoted to the gold membership!!");
@@ -585,7 +575,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 
             else if (Response.ToUpper() == "N")
             {
-                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
+                double NewPoint = charge / 10;
                 Console.WriteLine("Total bill: {0}", charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
                 CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
@@ -686,7 +676,6 @@ Guest SearchGuest(List<Guest> guestList)
     catch(ArgumentOutOfRangeException)
     {
         Console.WriteLine("Passport number length is too long");
-        SearchGuest(guestList);
         return null;
     }
     catch (ArgumentException)
