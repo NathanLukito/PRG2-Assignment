@@ -702,7 +702,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
     {
         try
         {
-            CheckGuest.iSCheckedin = false;
+            
             double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
             Console.WriteLine("Total charge is: $" + charge);
             Console.WriteLine(CheckGuest.ToString());
@@ -720,6 +720,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: ${2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
                     Console.WriteLine("You have earned {0} points", NewPoint);
                     CheckGuest.membership.points = Convert.ToInt32(NewPoint);
+                    CheckGuest.iSCheckedin = false;
                     if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                     {
                         Console.WriteLine("You have been promoted to the gold membership!!");
@@ -730,6 +731,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     {
 
                     }
+
                 }
 
                 else if (Response.ToUpper() == "N")
@@ -740,6 +742,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     string UserKey = Console.ReadLine();
                     Console.WriteLine("You have earned {0} points", NewPoint);
                     CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                    CheckGuest.iSCheckedin = false;
                     if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                     {
                         Console.WriteLine("You have been promoted to the gold membership!!");
