@@ -51,9 +51,6 @@ void ValidatePassport(string str)
     else if(str.Length != 9)
     {
         throw new ArgumentOutOfRangeException();
-
-
-
     }
     else if(regex.IsMatch(str) == true)
     {
