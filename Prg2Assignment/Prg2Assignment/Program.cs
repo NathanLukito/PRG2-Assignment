@@ -80,6 +80,25 @@ void ValidateName(string name)
     
 }
 
+
+void ValidateYear(string year)
+{
+    Regex regex = new Regex(@"^[0-9]+$"); //Input must be between 0-9
+    if (year.Length == 0)
+    {
+        throw new ArgumentNullException();
+    }
+    else if (regex.IsMatch(year) == true)
+    {
+        //Does nothing
+    }
+
+    else
+    {
+        throw new ArgumentException();
+    }
+}
+
 void InitStayData(List <Guest> guestList, List<Room> roomList)
 {
     using (StreamReader sr = new StreamReader("Stays.csv"))
@@ -775,13 +794,25 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
 
 void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
 {
-    Console.Write("Enter the year: ");
-    string year = Console.ReadLine();
-    //ValidateName(year);
-    CalculateMonthlyCharges(guestList, monthlyCharges, year);
-    foreach (var item in monthlyCharges)
+    try
     {
-        Console.WriteLine(item.Key + ": " + item.Value);
+        Console.Write("Enter the year: ");
+        string year = Console.ReadLine();
+        ValidateYear(year);
+        CalculateMonthlyCharges(guestList, monthlyCharges, year);
+        foreach (var item in monthlyCharges)
+        {
+            Console.WriteLine(item.Key + ": " + item.Value);
+        }
+    }
+    catch(ArgumentNullException Ne)
+    {
+        Console.WriteLine("A year is required for its monthly to be displayed");
+        DisplayMonthlyCharges(monthlyCharges);
+    }
+    catch(ArgumentException Ae)
+    {
+        Console.WriteLine("Invalid year, please try again.");
     }
 }
 
