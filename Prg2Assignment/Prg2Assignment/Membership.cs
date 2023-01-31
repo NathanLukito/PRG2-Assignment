@@ -29,6 +29,17 @@ namespace Prg2Assignment
             return guest.hotelStay.CalculateTotal(guest) / 10;
         }
 
+        public bool RedeemPoints(int TryRedeem)
+        {
+            if (points >= TryRedeem){
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public override string ToString()
         {
             return "Member Status: " + status + "\tPoints: " + points;

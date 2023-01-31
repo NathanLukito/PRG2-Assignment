@@ -710,24 +710,69 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                 string Response = Console.ReadLine();
                 if (Response.ToUpper() == "Y")
                 {
-                    Console.WriteLine("Press any key to make payment");
+                    Console.Write("Enter no. of points to redeem: ");
+                    string redeem = Console.ReadLine();
+                    try
+                    {
+                        int TryRedeem = Convert.ToInt32(redeem);
+                        if (CheckGuest.membership.RedeemPoints(TryRedeem) == true)
+                        {
+                            Console.WriteLine("Press any key to make payment");
+                            string UserKey = Console.ReadLine();
+                            double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
+                            charge = charge - CheckGuest.membership.points;
+                            Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: ${2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
+                            Console.WriteLine("You have earned {0} points", NewPoint);
+                            CheckGuest.membership.points = Convert.ToInt32(NewPoint);
+                            CheckGuest.iSCheckedin = false;
+                            if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                            {
+                                Console.WriteLine("You have been promoted to the gold membership!!");
+                                CheckGuest.membership.status = "Gold";
+                                Console.WriteLine("\n");
+                                Console.WriteLine("#################################");
+                                Console.WriteLine("\n");
+                                Console.WriteLine("Guest successfully checked out!");
+                                Console.WriteLine("\n");
+                                Console.WriteLine("#################################");
+                                Console.WriteLine("\n\n");
+                                ShowGuestDetails(guestList);
+                            }
+
+                            else
+                            {
+                                Console.WriteLine("\n");
+                                Console.WriteLine("#################################");
+                                Console.WriteLine("\n");
+                                Console.WriteLine("Guest successfully checked out!");
+                                Console.WriteLine("\n");
+                                Console.WriteLine("#################################");
+                                Console.WriteLine("\n\n");
+                                ShowGuestDetails(guestList);
+                            }
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("You cannot redeem more points than you own");
+                            CheckOutGuest(guestList, roomList);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Invalid input");
+                        CheckOutGuest(guestList, roomList);
+                    }
+                    
+                   /*Console.WriteLine("Press any key to make payment");
                     string UserKey = Console.ReadLine();
                     double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
                     charge = charge - CheckGuest.membership.points;
                     Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: ${2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
                     Console.WriteLine("You have earned {0} points", NewPoint);
                     CheckGuest.membership.points = Convert.ToInt32(NewPoint);
-                    CheckGuest.iSCheckedin = false;
-                    if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
-                    {
-                        Console.WriteLine("You have been promoted to the gold membership!!");
-                        CheckGuest.membership.status = "Gold";
-                    }
-
-                    else
-                    {
-
-                    }
+                    CheckGuest.iSCheckedin = false;*/
+                   
 
                 }
 
@@ -744,11 +789,26 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                     {
                         Console.WriteLine("You have been promoted to the gold membership!!");
                         CheckGuest.membership.status = "Gold";
+                        Console.WriteLine("\n");
+                        Console.WriteLine("#################################");
+                        Console.WriteLine("\n");
+                        Console.WriteLine("Guest successfully checked out!");
+                        Console.WriteLine("\n");
+                        Console.WriteLine("#################################");
+                        Console.WriteLine("\n\n");
+                        ShowGuestDetails(guestList);
                     }
 
                     else
                     {
-
+                        Console.WriteLine("\n");
+                        Console.WriteLine("#################################");
+                        Console.WriteLine("\n");
+                        Console.WriteLine("Guest successfully checked out!");
+                        Console.WriteLine("\n");
+                        Console.WriteLine("#################################");
+                        Console.WriteLine("\n\n");
+                        ShowGuestDetails(guestList);
                     }
                 }
 
@@ -772,29 +832,52 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                 {
                     Console.WriteLine("You have been promoted to the Silver membership!!");
                     CheckGuest.membership.status = "Silver";
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Guest successfully checked out!");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n\n");
+                    ShowGuestDetails(guestList);
                 }
 
                 else if (NewPoint >= 200)
                 {
                     Console.WriteLine("You have been promoted to the gold membership!!");
                     CheckGuest.membership.status = "Gold";
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Guest successfully checked out!");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n\n");
+                    ShowGuestDetails(guestList);
                 }
 
                 else
                 {
-
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Guest successfully checked out!");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("#################################");
+                    Console.WriteLine("\n\n");
+                    ShowGuestDetails(guestList);
                 }
             }
 
 
-            Console.WriteLine("\n");
+           /* Console.WriteLine("\n");
             Console.WriteLine("#################################");
             Console.WriteLine("\n");
             Console.WriteLine("Guest successfully checked out!");
             Console.WriteLine("\n");
             Console.WriteLine("#################################");
             Console.WriteLine("\n\n");
-            ShowGuestDetails(guestList);
+            ShowGuestDetails(guestList);*/
         }
 
         catch (Exception)
