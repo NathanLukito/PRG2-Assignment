@@ -543,43 +543,83 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 {
     ShowGuestDetails(guestList);
     Guest CheckGuest = SearchGuest(guestList);
-    try
+    if (CheckGuest.iSCheckedin == true)
     {
-        CheckGuest.iSCheckedin = false;
-        double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
-        Console.WriteLine("Total charge is: " + charge);
-        Console.WriteLine(CheckGuest.ToString());
-        if (CheckGuest.membership.status == "Gold" || CheckGuest.membership.status == "Silver")
+        try
         {
-            Console.WriteLine("You have {0} points redeemable. 1point = $1", CheckGuest.membership.points);
-            Console.WriteLine("Do you wish to redeem your points to offset your total bill? [Y/N]");
-            string Response = Console.ReadLine();
-            if (Response.ToUpper() == "Y")
+            CheckGuest.iSCheckedin = false;
+            double charge = CheckGuest.hotelStay.CalculateTotal(CheckGuest);
+            Console.WriteLine("Total charge is: $" + charge);
+            Console.WriteLine(CheckGuest.ToString());
+            if (CheckGuest.membership.status == "Gold" || CheckGuest.membership.status == "Silver")
             {
-                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
-                charge = charge - CheckGuest.membership.points;
-                Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
-                Console.WriteLine("You have earned {0} points", NewPoint);
-                CheckGuest.membership.points = Convert.ToInt32(NewPoint);
-                if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                Console.WriteLine("You have {0} points redeemable. 1point = $1", CheckGuest.membership.points);
+                Console.WriteLine("Do you wish to redeem your points to offset your total bill? [Y/N]");
+                string Response = Console.ReadLine();
+                if (Response.ToUpper() == "Y")
                 {
-                    Console.WriteLine("You have been promoted to the gold membership!!");
-                    CheckGuest.membership.status = "Gold";
+                    Console.WriteLine("Press any key to make payment");
+                    string UserKey = Console.ReadLine();
+                    double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
+                    charge = charge - CheckGuest.membership.points;
+                    Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: ${2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
+                    Console.WriteLine("You have earned {0} points", NewPoint);
+                    CheckGuest.membership.points = Convert.ToInt32(NewPoint);
+                    if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                    {
+                        Console.WriteLine("You have been promoted to the gold membership!!");
+                        CheckGuest.membership.status = "Gold";
+                    }
+
+                    else
+                    {
+
+                    }
+                }
+
+                else if (Response.ToUpper() == "N")
+                {
+                    double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
+                    Console.WriteLine("Total bill: ${0}", charge);
+                    Console.WriteLine("Press any key to make payment");
+                    string UserKey = Console.ReadLine();
+                    Console.WriteLine("You have earned {0} points", NewPoint);
+                    CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                    if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+                    {
+                        Console.WriteLine("You have been promoted to the gold membership!!");
+                        CheckGuest.membership.status = "Gold";
+                    }
+
+                    else
+                    {
+
+                    }
                 }
 
                 else
                 {
-
+                    Console.WriteLine("Invalid input");
+                    CheckOutGuest(guestList, roomList);
                 }
             }
-
-            else if (Response.ToUpper() == "N")
+            else
             {
-                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
-                Console.WriteLine("Total bill: {0}", charge);
+                Console.WriteLine("You are unable to redeem points to offset your total bill until you have a higher membership status");
+                double NewPoint = charge / 10;
+                Console.WriteLine("Total bill: ${0}", charge);
+                Console.WriteLine("Press any key to make payment");
+                string UserKey = Console.ReadLine();
                 Console.WriteLine("You have earned {0} points", NewPoint);
                 CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
-                if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
+
+                if (NewPoint >= 100 && NewPoint < 200)
+                {
+                    Console.WriteLine("You have been promoted to the Silver membership!!");
+                    CheckGuest.membership.status = "Silver";
+                }
+
+                else if (NewPoint >= 200)
                 {
                     Console.WriteLine("You have been promoted to the gold membership!!");
                     CheckGuest.membership.status = "Gold";
@@ -591,54 +631,30 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
                 }
             }
 
-            else
-            {
-                Console.WriteLine("Invalid input");
-                CheckOutGuest(guestList, roomList);
-            }
+
+            Console.WriteLine("\n");
+            Console.WriteLine("#################################");
+            Console.WriteLine("\n");
+            Console.WriteLine("Guest successfully checked out!");
+            Console.WriteLine("\n");
+            Console.WriteLine("#################################");
+            Console.WriteLine("\n\n");
+            ShowGuestDetails(guestList);
         }
-        else
+
+        catch (Exception)
         {
-            Console.WriteLine("You are unable to redeem points to offset your total bill until you have a higher membership status");
-            double NewPoint = charge / 10;
-            Console.WriteLine("Total bill: {0}", charge);
-            Console.WriteLine("You have earned {0} points", NewPoint);
-            CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
-
-            if (NewPoint >= 100 && NewPoint < 200)
-            {
-                Console.WriteLine("You have been promoted to the Silver membership!!");
-                CheckGuest.membership.status = "Silver";
-            }
-
-            else if (NewPoint >= 200)
-            {
-                Console.WriteLine("You have been promoted to the gold membership!!");
-                CheckGuest.membership.status = "Gold";
-            }
-
-            else
-            {
-
-            }
+            Console.WriteLine("Invalid Input");
+            CheckOutGuest(guestList, roomList);
         }
-
-
-        Console.WriteLine("\n");
-        Console.WriteLine("#################################");
-        Console.WriteLine("\n");
-        Console.WriteLine("Guest successfully checked out!");
-        Console.WriteLine("\n");
-        Console.WriteLine("#################################");
-        Console.WriteLine("\n\n");
-        ShowGuestDetails(guestList);
     }
 
-    catch (Exception)
+    else
     {
-        Console.WriteLine("Invalid Input");
+        Console.WriteLine("Guest is not checked in.");
         CheckOutGuest(guestList, roomList);
     }
+    
 }
 Guest SearchGuest(List<Guest> guestList)
 {
@@ -676,6 +692,7 @@ Guest SearchGuest(List<Guest> guestList)
     catch(ArgumentOutOfRangeException)
     {
         Console.WriteLine("Passport number length is too long");
+        SearchGuest(guestList);
         return null;
     }
     catch (ArgumentException)
@@ -760,7 +777,7 @@ void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
 {
     Console.Write("Enter the year: ");
     string year = Console.ReadLine();
-    ValidateName(year);
+    //ValidateName(year);
     CalculateMonthlyCharges(guestList, monthlyCharges, year);
     foreach (var item in monthlyCharges)
     {
