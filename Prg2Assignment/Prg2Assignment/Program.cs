@@ -5,11 +5,7 @@
 // Student Number: S10243254B
 // Student Name : Ervin Wong Yong Qi
 //==========================================================
-//101 300  ok
-//303 2350 ok
-//204 1400 ok
-//201 1120 ok
-//202 1040 ok
+
 
 
 
@@ -935,11 +931,6 @@ void CalculateMonthlyCharges(List<Guest> guestList, IDictionary<string, double> 
 
 void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
 {
-    Console.Write("Enter the year: ");
-    string year = Console.ReadLine();
-    CalculateMonthlyCharges(guestList, monthlyCharges, year);
-    foreach (var item in monthlyCharges)
-    {
     try
     {
         Console.Write("Enter the year: ");
@@ -951,16 +942,17 @@ void DisplayMonthlyCharges(IDictionary<string, double> monthlyCharges)
             Console.WriteLine(item.Key + ": " + item.Value);
         }
     }
-    catch(ArgumentNullException Ne)
+    catch (ArgumentNullException Ne)
     {
         Console.WriteLine("A year is required for its monthly to be displayed");
         DisplayMonthlyCharges(monthlyCharges);
     }
-    catch(ArgumentException Ae)
+    catch (ArgumentException Ae)
     {
         Console.WriteLine("Invalid year, please try again.");
     }
 }
+
 
 void Main()
 {
@@ -972,8 +964,8 @@ void Main()
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
         string option = Console.ReadLine();
 
-        try
-        {
+        //try
+        //{
         switch (option)
         {
             case "1":
@@ -1068,12 +1060,12 @@ void Main()
         }
 
     }
-    catch(ArgumentException)
-    {
-       Console.WriteLine("Invalid Option, try again");
-    }
+    //catch(ArgumentException)
+    //{
+    //   Console.WriteLine("Invalid Option, try again");
+    //}
 
-    }   
+    //}   
 }
 
 Main();
