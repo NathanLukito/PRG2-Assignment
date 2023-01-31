@@ -556,11 +556,11 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
             string Response = Console.ReadLine();
             if (Response.ToUpper() == "Y")
             {
-                double NewPoint = charge / 10;
+                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
                 charge = charge - CheckGuest.membership.points;
-                Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points,charge);
+                Console.WriteLine("You have used {0} points to offset ${1} from your total bill. Total bill: {2}", CheckGuest.membership.points, CheckGuest.membership.points, charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
-                CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
+                CheckGuest.membership.points = Convert.ToInt32(NewPoint);
                 if (NewPoint >= 100 && CheckGuest.membership.status == "Silver")
                 {
                     Console.WriteLine("You have been promoted to the gold membership!!");
@@ -569,13 +569,13 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
 
                 else
                 {
-                    
+
                 }
             }
 
             else if (Response.ToUpper() == "N")
             {
-                double NewPoint = charge / 10;
+                double NewPoint = CheckGuest.membership.EarnPoints(CheckGuest);
                 Console.WriteLine("Total bill: {0}", charge);
                 Console.WriteLine("You have earned {0} points", NewPoint);
                 CheckGuest.membership.points = CheckGuest.membership.points + Convert.ToInt32(NewPoint);
@@ -633,7 +633,7 @@ void CheckOutGuest(List<Guest> guestList, List<Room> roomList)
         Console.WriteLine("\n\n");
         ShowGuestDetails(guestList);
     }
-    
+
     catch (Exception)
     {
         Console.WriteLine("Invalid Input");
