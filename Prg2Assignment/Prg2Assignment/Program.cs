@@ -964,8 +964,8 @@ void Main()
         Console.WriteLine("[1] List all guests \n[2] List all rooms \n[3] Register guest \n[4] CheckIn guest \n[5] List stay details \n[6] Extend Stay \n[7] Check Out Guest \n[8] DisplayMonthlyCharges \n[0] Exit Program");
         string option = Console.ReadLine();
 
-        //try
-        //{
+        try
+        {
         switch (option)
         {
             case "1":
@@ -1060,12 +1060,12 @@ void Main()
         }
 
     }
-    //catch(ArgumentException)
-    //{
-    //   Console.WriteLine("Invalid Option, try again");
-    //}
+    catch(ArgumentException)
+    {
+       Console.WriteLine("Invalid Option, try again");
+    }
 
-    //}   
+    }   
 }
 
 Main();
